@@ -164,7 +164,9 @@ public final class UsersJson {
         // Create opening square bracket for array of users.
         dataBuilder.append("[\n");
 
-        for (User user : users) {
+        for (int i = 0; i < users.size(); i++) {
+            final User user = users.get(i);
+
             // Create opening curly brace for current user's Json object.
             dataBuilder.append(SPACE + "{\n");
 
@@ -173,7 +175,7 @@ public final class UsersJson {
             this.writeValue(dataBuilder, BALANCE_KEY, Long.toString(user.getBitcoins()), true);
 
             // Create closing curly brace for current user's Json object.
-            dataBuilder.append(SPACE + "}\n");
+            dataBuilder.append(SPACE + "}").append(i == users.size() - 1 ? "" : ",").append("\n");
         }
 
         // Create closing square bracket for array of users.
