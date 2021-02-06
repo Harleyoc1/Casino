@@ -30,6 +30,9 @@ repositories {
 dependencies {
     // Gives access to javax.annotation.Nullable.
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    // Google's simple Json parser.
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    // Java Utilities - my own miscellaneous utility classes.
     implementation group: 'com.harleyoconnor.javautilities', name: 'JavaUtilities', version: '0.0.6'
 
     // Allows for testing classes.

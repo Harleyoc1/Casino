@@ -3,6 +3,7 @@ package com.harleyoconnor.casino;
 import com.harleyoconnor.casino.menus.SignInScreen;
 import com.harleyoconnor.casino.menus.SignUpScreen;
 import com.harleyoconnor.casino.users.User;
+import com.harleyoconnor.casino.users.Users;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -24,6 +25,8 @@ public final class Casino extends Application {
     public void start(Stage primaryStage) {
         INSTANCE = this;
 
+        Users.getFromFile(); // Get users from file.
+
         this.primaryStage = primaryStage;
         this.primaryScene = new Scene(new StackPane());
 
@@ -39,9 +42,17 @@ public final class Casino extends Application {
      * Sets up basic properties for the main {@link Stage}.
      */
     private void setupBasicProperties () {
-        this.primaryStage.setTitle("Casino");
+        this.setTitle();
         this.primaryStage.setHeight(300);
         this.primaryStage.setWidth(500);
+    }
+
+    public void setTitle () {
+        this.setTitle("");
+    }
+
+    public void setTitle (String subTitle) {
+        this.primaryStage.setTitle(AppConstants.APP_NAME + (subTitle.length() > 0 ? " - " + subTitle : ""));
     }
 
     public User getCurrentUser() {

@@ -41,11 +41,11 @@ public final class SignUpScreen extends MenuScreen {
         this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").build();
         this.errorLabel = LabelBuilder.createLabel().wrapText().build();
 
-        Button signUpButton = new Button();
+        Button signUpButton = new Button("Sign Up");
         signUpButton.setOnAction(this::onSignUpPres);
 
         vBox.setPadding(new Insets(25));
-        vBox.getChildren().addAll(InterfaceUtils.createVerticalSpacer(), this.usernameField, this.passwordField, signUpButton, InterfaceUtils.createVerticalSpacer());
+        vBox.getChildren().addAll(InterfaceUtils.createVerticalSpacer(), this.usernameField, this.passwordField, signUpButton, this.errorLabel, InterfaceUtils.createVerticalSpacer());
 
         layout.getChildren().addAll(vBox);
 
@@ -55,16 +55,33 @@ public final class SignUpScreen extends MenuScreen {
     private void onSignUpPres(ActionEvent event) {
         String username = this.usernameField.getText();
 
+        // Make sure they have actually entered a username.
+        if (username.length() < 1) {
+            this.errorLabel.setText("You must enter a username.");
+            return;
+        }
+
+        // Make sure the username doesn't already exist.
         if (Users.doesUsernameExist(username)) {
             this.errorLabel.setText("Username already exists.");
             return;
         }
 
+        String password = this.passwordField.getText();
+
+        // Make sure the password is at least the minimum length.
+        if (password.length() < Users.MIN_PASSWORD_LENGTH) {
+            this.errorLabel.setText("Password must have at least " + Users.MIN_PASSWORD_LENGTH + " characters.");
+            return;
+        }
+
+        // Put password into a handler and hash it.
         PasswordHandler passwordHandler = new PasswordHandler(this.passwordField.getText()).hash();
+        // Create new user object.
+        User user = new User(username, passwordHandler);
 
-        System.out.println(passwordHandler.getPassword());
-
-        Casino.getInstance().setCurrentUser(new User(username, passwordHandler));
+        Users.register(user); // Register the user.
+        Casino.getInstance().setCurrentUser(user); // Set new user to current one.
     }
 
     @Override

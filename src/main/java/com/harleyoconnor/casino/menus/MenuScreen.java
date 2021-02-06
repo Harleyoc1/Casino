@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.menus;
 
+import com.harleyoconnor.casino.Casino;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -19,7 +20,7 @@ public abstract class MenuScreen {
         this.scene = scene;
         this.previousLayout = previousLayout;
 
-        this.stage.setTitle(this.stage.getTitle() + " - " + this.getTitle());
+        Casino.getInstance().setTitle(this.getTitle());
 
         this.layout = this.setupScreen();
 
