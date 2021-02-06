@@ -31,8 +31,8 @@ public final class GamesMenuScreen extends MenuScreen {
 
     private TextField betAmountField;
 
-    public GamesMenuScreen(Stage stage, Scene scene, MenuScreen previousScreen) {
-        super(stage, scene, previousScreen);
+    public GamesMenuScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen) {
+        super(casino, stage, scene, previousScreen);
     }
 
     @Override
@@ -66,7 +66,7 @@ public final class GamesMenuScreen extends MenuScreen {
     }
 
     private void gameButtonPressed (ActionEvent event, GameHolder<?> gameHolder) {
-        gameHolder.construct(this.stage, this.scene, this, new Player(Casino.getInstance().getCurrentUser(), 6)).show();
+        gameHolder.construct(this.casino, this.stage, this.scene, this, new Player(this.casino.getCurrentUser(), 6)).show();
     }
 
     @Override

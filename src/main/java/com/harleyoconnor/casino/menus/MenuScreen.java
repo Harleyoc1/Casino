@@ -10,12 +10,14 @@ import javafx.stage.Stage;
  */
 public abstract class MenuScreen {
 
+    protected final Casino casino;
     protected final Stage stage;
     protected final Scene scene;
     protected final MenuScreen previousScreen;
     protected final Pane layout;
 
-    public MenuScreen(Stage stage, Scene scene, MenuScreen previousScreen) {
+    public MenuScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen) {
+        this.casino = casino;
         this.stage = stage;
         this.scene = scene;
         this.previousScreen = previousScreen;
@@ -24,7 +26,7 @@ public abstract class MenuScreen {
     }
 
     private void setTitle () {
-        Casino.getInstance().setTitle(this.getTitle());
+        this.casino.setTitle(this.getTitle());
     }
 
     public void show () {

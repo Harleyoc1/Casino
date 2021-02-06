@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.games.blackjack;
 
+import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.Games;
 import com.harleyoconnor.casino.games.Player;
@@ -14,8 +15,8 @@ import javafx.stage.Stage;
  */
 public final class BlackJack extends Game {
 
-    public BlackJack(Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
-        super(stage, scene, previousScreen, player, Games.BLACKJACK);
+    public BlackJack(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
+        super(casino, stage, scene, previousScreen, player, Games.BLACKJACK);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.games.blackjack;
 
+import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.games.GameHolder;
 import com.harleyoconnor.casino.games.Player;
 import com.harleyoconnor.casino.menus.MenuScreen;
@@ -16,8 +17,8 @@ public final class BlackJackHolder extends GameHolder<BlackJack> {
     }
 
     @Override
-    public BlackJack construct(Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
-        return new BlackJack(stage, scene, previousScreen, player);
+    public BlackJack construct(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
+        return new BlackJack(casino, stage, scene, previousScreen, player);
     }
 
 }

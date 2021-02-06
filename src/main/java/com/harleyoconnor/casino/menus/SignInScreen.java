@@ -31,8 +31,8 @@ public final class SignInScreen extends MenuScreen {
     private TextField passwordField;
     private Label errorLabel;
 
-    public SignInScreen(Stage stage, Scene scene, MenuScreen previousScreen) {
-        super(stage, scene, previousScreen);
+    public SignInScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen) {
+        super(casino, stage, scene, previousScreen);
     }
 
     @Override
@@ -89,8 +89,8 @@ public final class SignInScreen extends MenuScreen {
             return;
         }
 
-        Casino.getInstance().setCurrentUser(user.get());
-        new GamesMenuScreen(this.stage, this.scene, this).show();
+        this.casino.setCurrentUser(user.get());
+        new GamesMenuScreen(this.casino, this.stage, this.scene, this).show();
     }
 
     private void onSignUpPress (ActionEvent event) {
@@ -98,7 +98,7 @@ public final class SignInScreen extends MenuScreen {
             this.previousScreen.show();
         else {
             // Create the sign up screen if it wasn't the previous screen.
-            new SignUpScreen(this.stage, this.scene, this).show();
+            new SignUpScreen(this.casino, this.stage, this.scene, this).show();
         }
     }
 

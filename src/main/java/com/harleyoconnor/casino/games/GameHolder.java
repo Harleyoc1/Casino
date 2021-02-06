@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.games;
 
+import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.menus.MenuScreen;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,6 +20,6 @@ public abstract class GameHolder<T extends Game> {
         return name;
     }
 
-    public abstract T construct (Stage stage, Scene scene, MenuScreen previousScreen, Player player);
+    public abstract T construct (Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player);
 
 }

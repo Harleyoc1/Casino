@@ -35,7 +35,7 @@ public final class Casino extends Application {
 
         this.setupBasicProperties();
 
-        new SignInScreen(this.primaryStage, this.primaryScene, null).show();
+        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
 //        new GamesMenuScreen(this.primaryStage, this.primaryScene, null);
 
         primaryStage.setScene(this.primaryScene);
