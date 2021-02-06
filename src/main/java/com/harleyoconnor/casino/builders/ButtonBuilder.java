@@ -7,27 +7,20 @@ import javafx.scene.control.Button;
 /**
  * @author Harley O'Connor
  */
-public final class ButtonBuilder<T extends Button> implements NodeBuilder<T> {
+public final class ButtonBuilder<T extends Button> extends NodeBuilder<T, ButtonBuilder<T>> {
 
-    private final T button;
-
-    public ButtonBuilder(T button) {
-        this.button = button;
+    public ButtonBuilder(T node) {
+        super(node);
     }
 
     public ButtonBuilder<T> text(String text) {
-        this.button.setText(text);
+        this.node.setText(text);
         return this;
     }
 
     public ButtonBuilder<T> onAction(EventHandler<ActionEvent> eventHandler) {
-        this.button.setOnAction(eventHandler);
+        this.node.setOnAction(eventHandler);
         return this;
-    }
-
-    @Override
-    public T build() {
-        return this.button;
     }
 
     public static ButtonBuilder<Button> createButton () {

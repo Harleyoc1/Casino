@@ -1,9 +1,11 @@
 package com.harleyoconnor.casino;
 
+import com.harleyoconnor.casino.menus.GamesMenuScreen;
 import com.harleyoconnor.casino.menus.SignInScreen;
 import com.harleyoconnor.casino.menus.SignUpScreen;
 import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
+import com.harleyoconnor.javautilities.FileUtils;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -29,10 +31,12 @@ public final class Casino extends Application {
 
         this.primaryStage = primaryStage;
         this.primaryScene = new Scene(new StackPane());
+        this.primaryScene.getStylesheets().add(AppConstants.FILE_PREFIX + FileUtils.getFile(AppConstants.DEFAULT_STYLESHEET_PATH).getPath());
 
         this.setupBasicProperties();
 
-        new SignUpScreen(this.primaryStage, this.primaryScene, null);
+//        new SignUpScreen(this.primaryStage, this.primaryScene, null);
+        new GamesMenuScreen(this.primaryStage, this.primaryScene, null);
 
         primaryStage.setScene(this.primaryScene);
         primaryStage.show();

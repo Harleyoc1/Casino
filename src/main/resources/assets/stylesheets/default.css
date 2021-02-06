@@ -1,0 +1,19 @@
+.title {
+    -fx-font-family: Helvetica;
+    -fx-font-size: 22;
+}
+
+.body {
+    -fx-font-family: Helvetica;
+    -fx-font-size: 14;
+}
+
+.invisible-button {
+    -fx-background-color: none;
+}
+
+.invisible-button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: none;
+    -fx-border-color: none;
+}

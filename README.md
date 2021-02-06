@@ -1,2 +1,2 @@
 # Casino
-A JavaFX application for Casino games.  
+A simple JavaFX application for Casino games.  

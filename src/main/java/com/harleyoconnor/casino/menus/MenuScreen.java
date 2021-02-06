@@ -20,14 +20,17 @@ public abstract class MenuScreen {
         this.scene = scene;
         this.previousScreen = previousScreen;
 
-        Casino.getInstance().setTitle(this.getTitle());
-
         this.layout = this.setupScreen();
 
         this.show();
     }
 
+    private void setTitle () {
+        Casino.getInstance().setTitle(this.getTitle());
+    }
+
     public void show () {
+        this.setTitle();
         this.scene.setRoot(this.layout);
     }
 

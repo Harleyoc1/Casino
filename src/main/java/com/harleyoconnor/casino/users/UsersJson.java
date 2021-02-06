@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.users;
 
+import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.javautilities.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,18 +22,22 @@ import java.util.List;
  */
 public final class UsersJson {
 
+    // Key constants.
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
     private static final String BALANCE_KEY = "balance";
 
+    // A tab of space for making the Json more readable.
     private static final String SPACE = "   ";
+
+    private static final String USERS_PATH = AppConstants.DATA_PATH + "users.json";
 
     private final JSONParser parser = new JSONParser();
     private final JSONArray usersList;
     private final File usersFile;
 
     public UsersJson() {
-        this.usersFile = FileUtils.getFile("users.json");
+        this.usersFile = FileUtils.getFile(USERS_PATH, false);
         this.usersList = this.getUsersList();
     }
 
@@ -184,9 +189,8 @@ public final class UsersJson {
         this.writeData(dataBuilder.toString());
     }
 
-    private StringBuilder writeValue (StringBuilder builder, String key, String value, boolean lastOfObject) {
+    private void writeValue (StringBuilder builder, String key, String value, boolean lastOfObject) {
         builder.append(SPACE + SPACE).append("\"").append(key).append("\": ").append(value).append(lastOfObject ? "" : ",").append("\n");
-        return builder;
     }
 
     private void writeData (String dataToWrite) {

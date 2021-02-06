@@ -6,21 +6,15 @@ import javafx.scene.control.TextField;
 /**
  * @author Harley O'Connor
  */
-public final class TextFieldBuilder<T extends TextField> implements NodeBuilder<T> {
+public final class TextFieldBuilder<T extends TextField> extends NodeBuilder<T, TextFieldBuilder<T>> {
 
-    private final T textField;
-
-    public TextFieldBuilder(T textField) {
-        this.textField = textField;
+    public TextFieldBuilder(T node) {
+        super(node);
     }
 
     public TextFieldBuilder<T> placeholder(String text) {
-        this.textField.setPromptText(text);
+        this.node.setPromptText(text);
         return this;
-    }
-
-    public T build () {
-        return textField;
     }
 
     public static TextFieldBuilder<TextField> createTextField () {

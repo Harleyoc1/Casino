@@ -3,15 +3,35 @@ package com.harleyoconnor.casino.builders;
 import javafx.scene.Node;
 
 /**
- * An interface for a simple JavaFX node builder.
+ * An abstract class for a simple JavaFX node builder.
  *
  * @author Harley O'Connor
  */
-public interface NodeBuilder<T extends Node> {
+@SuppressWarnings("unchecked") // These warnings are invalid considering this is an abstract class, so ignore them.
+public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
+
+    protected final T node;
+
+    public NodeBuilder(T node) {
+        this.node = node;
+    }
 
     /**
-     * @return The actual value of the object the builder has been building.
+     * Adds style classes to node.
+     *
+     * @param styleClassIds The style classes to add.
+     * @return This node builder.
      */
-    T build ();
+    public V styleClasses(String... styleClassIds) {
+        this.node.getStyleClass().addAll(styleClassIds);
+        return (V) this;
+    }
+
+    /**
+     * @return The node that's been configured.
+     */
+    public T build () {
+        return this.node;
+    }
 
 }
