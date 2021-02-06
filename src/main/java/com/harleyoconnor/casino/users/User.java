@@ -7,7 +7,7 @@ public final class User {
 
     private final String username;
     private final PasswordHandler passwordHandler;
-    private int bitcoins = 1000;
+    private long bitcoins = 1000;
 
     public User(String username, PasswordHandler passwordHandler) {
         this.username = username;
@@ -22,12 +22,13 @@ public final class User {
         return passwordHandler;
     }
 
-    public int getBitcoins() {
+    public long getBitcoins() {
         return bitcoins;
     }
 
-    public void setBitcoins(int bitcoins) {
+    public User setBitcoins(long bitcoins) {
         this.bitcoins = bitcoins;
+        return this;
     }
 
     public void incrementBitcoins (int amount) {

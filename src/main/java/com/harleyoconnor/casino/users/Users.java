@@ -21,7 +21,6 @@ public final class Users {
 
         // Get users from file.
         USERS.addAll(USERS_JSON.readUsers());
-        System.out.println(USERS.size());
     }
 
     public static void register(User user) {
