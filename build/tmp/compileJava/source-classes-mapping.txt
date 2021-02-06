@@ -1,7 +1,7 @@
 com/harleyoconnor/casino/builders/LabelBuilder.java
  com.harleyoconnor.casino.builders.LabelBuilder
-com/harleyoconnor/casino/Casino.java
- com.harleyoconnor.casino.Casino
+com/harleyoconnor/casino/users/UsersJson.java
+ com.harleyoconnor.casino.users.UsersJson
 com/harleyoconnor/casino/users/PasswordHandler.java
  com.harleyoconnor.casino.users.PasswordHandler
 com/harleyoconnor/casino/builders/TextFieldBuilder.java
@@ -10,15 +10,15 @@ com/harleyoconnor/casino/AppConstants.java
  com.harleyoconnor.casino.AppConstants
 com/harleyoconnor/casino/users/Users.java
  com.harleyoconnor.casino.users.Users
-com/harleyoconnor/casino/users/UsersJson.java
- com.harleyoconnor.casino.users.UsersJson
+com/harleyoconnor/casino/menus/MenuScreen.java
+ com.harleyoconnor.casino.menus.MenuScreen
 com/harleyoconnor/casino/menus/SignInScreen.java
  com.harleyoconnor.casino.menus.SignInScreen
 com/harleyoconnor/casino/users/User.java
  com.harleyoconnor.casino.users.User
 com/harleyoconnor/casino/utils/InterfaceUtils.java
  com.harleyoconnor.casino.utils.InterfaceUtils
-com/harleyoconnor/casino/menus/MenuScreen.java
- com.harleyoconnor.casino.menus.MenuScreen
+com/harleyoconnor/casino/Casino.java
+ com.harleyoconnor.casino.Casino
 com/harleyoconnor/casino/menus/SignUpScreen.java
  com.harleyoconnor.casino.menus.SignUpScreen

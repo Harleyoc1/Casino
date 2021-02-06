@@ -28,7 +28,11 @@ public final class Users {
         if (doesUsernameExist(user.getUsername()))
             return;
 
+        // Add user to the user list.
         USERS.add(user);
+
+        // Update the user Json file.
+        USERS_JSON.writeUserData(USERS);
     }
 
     public static Optional<User> find(String username) {

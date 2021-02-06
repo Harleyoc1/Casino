@@ -7,9 +7,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.annotation.Nullable;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,8 @@ public final class UsersJson {
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
     private static final String BALANCE_KEY = "balance";
+
+    private static final String SPACE = "   ";
 
     private final JSONParser parser = new JSONParser();
     private final JSONArray usersList;
@@ -153,8 +158,43 @@ public final class UsersJson {
         return (T) object;
     }
 
-    public void writeUser (User user) {
+    public void writeUserData (List<User> users) {
+        StringBuilder dataBuilder = new StringBuilder();
 
+        // Create opening square bracket for array of users.
+        dataBuilder.append("[\n");
+
+        for (User user : users) {
+            // Create opening curly brace for current user's Json object.
+            dataBuilder.append(SPACE + "{\n");
+
+            this.writeValue(dataBuilder, USERNAME_KEY, "\"" + user.getUsername() + "\"", false);
+            this.writeValue(dataBuilder, PASSWORD_KEY, "\"" + user.getPasswordHandler().getPassword() + "\"", false);
+            this.writeValue(dataBuilder, BALANCE_KEY, Long.toString(user.getBitcoins()), true);
+
+            // Create closing curly brace for current user's Json object.
+            dataBuilder.append(SPACE + "}\n");
+        }
+
+        // Create closing square bracket for array of users.
+        dataBuilder.append("]");
+
+        this.writeData(dataBuilder.toString());
+    }
+
+    private StringBuilder writeValue (StringBuilder builder, String key, String value, boolean lastOfObject) {
+        builder.append(SPACE + SPACE).append("\"").append(key).append("\": ").append(value).append(lastOfObject ? "" : ",").append("\n");
+        return builder;
+    }
+
+    private void writeData (String dataToWrite) {
+        try {
+            BufferedWriter writer = Files.newBufferedWriter(this.usersFile.toPath(), StandardCharsets.UTF_8);
+            writer.write(dataToWrite);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing user data to file.");
+        }
     }
 
 }
