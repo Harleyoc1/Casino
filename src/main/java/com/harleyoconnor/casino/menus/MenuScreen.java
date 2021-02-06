@@ -21,8 +21,6 @@ public abstract class MenuScreen {
         this.previousScreen = previousScreen;
 
         this.layout = this.setupScreen();
-
-        this.show();
     }
 
     private void setTitle () {
@@ -36,6 +34,6 @@ public abstract class MenuScreen {
 
     protected abstract Pane setupScreen ();
 
-    protected abstract String getTitle ();
+    public abstract String getTitle();
 
 }

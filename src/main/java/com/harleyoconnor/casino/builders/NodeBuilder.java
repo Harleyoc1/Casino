@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.builders;
 
+import javafx.scene.layout.Region;
 import javafx.scene.Node;
 
 /**
@@ -24,6 +25,60 @@ public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
      */
     public V styleClasses(String... styleClassIds) {
         this.node.getStyleClass().addAll(styleClassIds);
+        return (V) this;
+    }
+
+    /**
+     * Fixes width of node by setting max and min width to width given, if node is a {@link Region}.
+     *
+     * @param width The width to fix.
+     * @return This node builder.
+     */
+    public V fixWidth (int width) {
+        if (this.node instanceof Region) {
+            Region region = (Region) this.node;
+            region.setMinWidth(width);
+            region.setMaxWidth(width);
+        }
+        return (V) this;
+    }
+
+    /**
+     * Fixes height of node to height given, if node is a {@link Region}.
+     *
+     * @param height The height to fix.
+     * @return This node builder.
+     */
+    public V fixHeight (int height) {
+        if (this.node instanceof Region) {
+            Region region = (Region) this.node;
+            region.setMinHeight(height);
+            region.setMaxHeight(height);
+        }
+        return (V) this;
+    }
+
+    /**
+     * Fixes both width and height of node to given value, if node is a {@link Region}.
+     *
+     * @param widthAndHeight The height and width to fix.
+     * @return This node builder.
+     */
+    public V fixWidthHeight (int widthAndHeight) {
+        this.fixWidthHeight(widthAndHeight, widthAndHeight);
+        return (V) this;
+    }
+
+    /**
+     * Fixes both width and height of node to given width and height, if node is a {@link Region}.
+     *
+     * @param width The width to fix.
+     * @param height The height to fix.
+     * @return This node builder.
+     */
+    public V fixWidthHeight (int width, int height) {
+        this.fixWidth(width);
+        this.fixHeight(height);
         return (V) this;
     }
 

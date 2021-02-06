@@ -1,7 +1,6 @@
 package com.harleyoconnor.casino.builders;
 
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 
 /**
  * @author Harley O'Connor

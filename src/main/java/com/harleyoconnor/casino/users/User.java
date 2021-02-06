@@ -3,7 +3,7 @@ package com.harleyoconnor.casino.users;
 /**
  * @author Harley O'Connor
  */
-public final class User {
+public class User {
 
     private final String username;
     private final PasswordHandler passwordHandler;

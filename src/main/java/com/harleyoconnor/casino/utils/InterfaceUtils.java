@@ -34,11 +34,6 @@ public final class InterfaceUtils {
         return spacer;
     }
 
-    public static <T extends Pane> T addSpacerTo (final T pane, final boolean horizontal) {
-        pane.getChildren().add(horizontal ? createHorizontalSpacer() : createVerticalSpacer());
-        return pane;
-    }
-
     public static <T extends HBox> T centreElementsHorizontally (final T hBox) {
         hBox.getChildren().add(0, createHorizontalSpacer());
         hBox.getChildren().add(createHorizontalSpacer());
@@ -54,17 +49,6 @@ public final class InterfaceUtils {
     public static <T extends Pane> T addElementsToPane (final T pane, final Node... nodes) {
         pane.getChildren().addAll(nodes);
         return pane;
-    }
-
-    public static <T extends Pane> T removeElementsFromPane (final T pane, final Node... nodes) {
-        pane.getChildren().removeAll(nodes);
-        return pane;
-    }
-
-    public static Label createLabel (final String initialText) {
-        final Label label = new Label(initialText);
-        label.setWrapText(true);
-        return label;
     }
 
     public static <T extends Region> T fixWidth (final T region, final int width) {

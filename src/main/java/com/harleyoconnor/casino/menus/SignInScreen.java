@@ -90,7 +90,7 @@ public final class SignInScreen extends MenuScreen {
         }
 
         Casino.getInstance().setCurrentUser(user.get());
-        new GamesMenuScreen(this.stage, this.scene, this);
+        new GamesMenuScreen(this.stage, this.scene, this).show();
     }
 
     private void onSignUpPress (ActionEvent event) {
@@ -98,12 +98,12 @@ public final class SignInScreen extends MenuScreen {
             this.previousScreen.show();
         else {
             // Create the sign up screen if it wasn't the previous screen.
-            new SignUpScreen(this.stage, this.scene, this);
+            new SignUpScreen(this.stage, this.scene, this).show();
         }
     }
 
     @Override
-    protected String getTitle() {
+    public String getTitle() {
         return "Sign In";
     }
 

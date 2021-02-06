@@ -60,7 +60,7 @@ public final class PasswordHandler {
 //
 //        int zero = 0;
 //        for (int idx = 0; idx < hashFromIn.length; ++idx) {
-//            zero |= hash[idx] ^ hashFromIn[idx];
+//            zero |= hash[SIZE + idx] ^ hashFromIn[idx];
 //        }
 //
 //        return zero == 0;
