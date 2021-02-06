@@ -2,6 +2,7 @@ package com.harleyoconnor.casino.utils;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,6 +39,18 @@ public final class InterfaceUtils {
         return pane;
     }
 
+    public static <T extends HBox> T centreElementsHorizontally (final T hBox) {
+        hBox.getChildren().add(0, createHorizontalSpacer());
+        hBox.getChildren().add(createHorizontalSpacer());
+        return hBox;
+    }
+
+    public static <T extends VBox> T centreElementsVertically (final T vBox) {
+        vBox.getChildren().add(0, createVerticalSpacer());
+        vBox.getChildren().add(createVerticalSpacer());
+        return vBox;
+    }
+
     public static <T extends Pane> T addElementsToPane (final T pane, final Node... nodes) {
         pane.getChildren().addAll(nodes);
         return pane;
@@ -52,6 +65,12 @@ public final class InterfaceUtils {
         final Label label = new Label(initialText);
         label.setWrapText(true);
         return label;
+    }
+
+    public static <T extends Region> T fixWidth (final T region, final int width) {
+        region.setMinWidth(width);
+        region.setMaxWidth(width);
+        return region;
     }
 
 }

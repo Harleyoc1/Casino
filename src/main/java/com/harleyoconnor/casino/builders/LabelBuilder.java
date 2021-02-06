@@ -1,12 +1,12 @@
 package com.harleyoconnor.casino.builders;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
 
 /**
  * @author Harley O'Connor
  */
-public final class LabelBuilder<T extends Label> {
+public final class LabelBuilder<T extends Label> implements NodeBuilder<T> {
 
     private final T label;
 
@@ -14,8 +14,13 @@ public final class LabelBuilder<T extends Label> {
         this.label = label;
     }
 
-    public LabelBuilder<T> withText(String text) {
+    public LabelBuilder<T> text(String text) {
         this.label.setText(text);
+        return this;
+    }
+
+    public LabelBuilder<T> font(Font font) {
+        this.label.setFont(font);
         return this;
     }
 

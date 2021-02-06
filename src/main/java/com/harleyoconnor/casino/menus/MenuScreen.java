@@ -12,18 +12,22 @@ public abstract class MenuScreen {
 
     protected final Stage stage;
     protected final Scene scene;
-    protected final Pane previousLayout;
+    protected final MenuScreen previousScreen;
     protected final Pane layout;
 
-    public MenuScreen(Stage stage, Scene scene, Pane previousLayout) {
+    public MenuScreen(Stage stage, Scene scene, MenuScreen previousScreen) {
         this.stage = stage;
         this.scene = scene;
-        this.previousLayout = previousLayout;
+        this.previousScreen = previousScreen;
 
         Casino.getInstance().setTitle(this.getTitle());
 
         this.layout = this.setupScreen();
 
+        this.show();
+    }
+
+    public void show () {
         this.scene.setRoot(this.layout);
     }
 

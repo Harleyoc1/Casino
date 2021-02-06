@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 /**
  * @author Harley O'Connor
  */
-public final class TextFieldBuilder<T extends TextField> {
+public final class TextFieldBuilder<T extends TextField> implements NodeBuilder<T> {
 
     private final T textField;
 
