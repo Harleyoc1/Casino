@@ -17,6 +17,13 @@ public final class Card {
     }
 
     /**
+     * @return This {@link Card} object's default state.
+     */
+    public CardState getDefaultState () {
+        return new CardState(this, false);
+    }
+
+    /**
      * Gets the file name of the {@link Card} relative to <tt>textures/cards</tt>.
      *
      * @return The file name of this {@link Card}.
