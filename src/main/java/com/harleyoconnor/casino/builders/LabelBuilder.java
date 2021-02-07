@@ -23,7 +23,7 @@ public final class LabelBuilder<T extends Label> extends RegionBuilder<T, LabelB
         return this;
     }
 
-    public static LabelBuilder<Label> createLabel () {
+    public static LabelBuilder<Label> create() {
         return new LabelBuilder<>(new Label());
     }
 

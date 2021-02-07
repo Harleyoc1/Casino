@@ -32,28 +32,28 @@ public final class SignInScreen extends MenuScreen {
     @Override
     protected Pane setupScreen() {
         // Create title label.
-        final Label titleLabel = LabelBuilder.createLabel().text("Sign In").title().wrapText().build();
+        final Label titleLabel = LabelBuilder.create().text("Sign In").title().wrapText().build();
 
         // Create fields for username, password, and password confirmation.
         this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
         this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").build();
 
         // Create error label, for when the user enters details wrong - such as entering an existing username.
-        this.errorLabel = LabelBuilder.createLabel().wrapText().build();
+        this.errorLabel = LabelBuilder.create().wrapText().build();
 
         // Create sign up button - this will redirect the user to the sign up screen.
-        final Button signUpButton = ButtonBuilder.createButton().text("Sign Up").onAction(this::onSignUpPress).build();
+        final Button signUpButton = ButtonBuilder.create().text("Sign Up").onAction(this::onSignUpPress).build();
 
         // Create sign in button - this will attempt to sign the user in based on the details given.
-        final Button signInButton = ButtonBuilder.createButton().text("Sign In").onAction(this::onSignInPress).build();
+        final Button signInButton = ButtonBuilder.create().text("Sign In").onAction(this::onSignInPress).build();
 
         // Create vertical box and add the content to it.
-        VBox vBox = VBoxBuilder.createVBox().add(titleLabel, this.usernameField, this.passwordField,
-                HBoxBuilder.createHBox().add(signUpButton, InterfaceUtils.createHorizontalSpacer(), signInButton).build(), this.errorLabel)
+        VBox vBox = VBoxBuilder.create().add(titleLabel, this.usernameField, this.passwordField,
+                HBoxBuilder.create().add(signUpButton, InterfaceUtils.createHorizontalSpacer(), signInButton).build(), this.errorLabel)
                 .spacing().fixWidth(300).padding(25).build();
 
         // Create and return horizontal box with vertical box of content in the centre.
-        return HBoxBuilder.createHBox().add(vBox).centre().build();
+        return HBoxBuilder.create().add(vBox).centre().build();
     }
 
     /**

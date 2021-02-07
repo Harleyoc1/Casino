@@ -32,7 +32,7 @@ public final class SignUpScreen extends MenuScreen {
     @Override
     protected Pane setupScreen() {
         // Create title label.
-        final Label titleLabel = LabelBuilder.createLabel().text("Sign Up").title().wrapText().build();
+        final Label titleLabel = LabelBuilder.create().text("Sign Up").title().wrapText().build();
 
         // Create fields for username, password, and password confirmation.
         this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
@@ -40,21 +40,21 @@ public final class SignUpScreen extends MenuScreen {
         this.confirmPasswordField = TextFieldBuilder.createPasswordField().placeholder("Confirm Password").build();
 
         // Create error label, for when the user enters details wrong - such as entering an existing username.
-        this.errorLabel = LabelBuilder.createLabel().wrapText().build();
+        this.errorLabel = LabelBuilder.create().wrapText().build();
 
         // Create sign up button - this will attempt to sign the user up based on the entered data.
-        Button signUpButton = ButtonBuilder.createButton().text("Sign Up").onAction(this::onSignUpPress).build();
+        Button signUpButton = ButtonBuilder.create().text("Sign Up").onAction(this::onSignUpPress).build();
 
         // Create sign in button - this will redirect the user to the sign in screen.
-        Button signInButton = ButtonBuilder.createButton().text("Sign In").onAction(this::onSignInPress).build();
+        Button signInButton = ButtonBuilder.create().text("Sign In").onAction(this::onSignInPress).build();
 
         // Create vertical box and add the content to it.
-        VBox vBox = VBoxBuilder.createVBox().add(titleLabel, this.usernameField, this.passwordField, this.confirmPasswordField,
-                HBoxBuilder.createHBox().add(signInButton, InterfaceUtils.createHorizontalSpacer(), signUpButton).build(), this.errorLabel)
+        VBox vBox = VBoxBuilder.create().add(titleLabel, this.usernameField, this.passwordField, this.confirmPasswordField,
+                HBoxBuilder.create().add(signInButton, InterfaceUtils.createHorizontalSpacer(), signUpButton).build(), this.errorLabel)
                 .spacing().padding(25).fixWidth(300).build();
 
         // Create and return horizontal box with vertical box of content in the centre.
-        return HBoxBuilder.createHBox().add(vBox).centre().build();
+        return HBoxBuilder.create().add(vBox).centre().build();
     }
 
     /**

@@ -14,17 +14,6 @@ public abstract class PaneBuilder<T extends Pane, V extends PaneBuilder<T, V>> e
     }
 
     /**
-     * Adds the given {@link Node} to the {@link Pane}.
-     *
-     * @param node The {@link Node} to add.
-     * @return This {@link Pane} builder.
-     */
-    public V add (Node node) {
-        this.node.getChildren().add(node);
-        return (V) this;
-    }
-
-    /**
      * Adds the given {@link Node} objects to the {@link Pane}.
      *
      * @param node The {@link Node} objects to add.

@@ -25,7 +25,7 @@ public final class ButtonBuilder<T extends Button> extends RegionBuilder<T, Butt
         return this;
     }
 
-    public static ButtonBuilder<Button> createButton () {
+    public static ButtonBuilder<Button> create() {
         return new ButtonBuilder<>(new Button());
     }
 

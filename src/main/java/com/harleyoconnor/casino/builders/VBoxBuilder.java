@@ -31,7 +31,7 @@ public final class VBoxBuilder<T extends VBox> extends PaneBuilder<T, VBoxBuilde
         return this;
     }
 
-    public static VBoxBuilder<VBox> createVBox() {
+    public static VBoxBuilder<VBox> create() {
         return new VBoxBuilder<>(new VBox());
     }
 

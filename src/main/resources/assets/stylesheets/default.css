@@ -1,3 +1,11 @@
+.green {
+    -fx-background-color: darkgreen;
+}
+
+.white {
+    -fx-text-fill: white;
+}
+
 .title {
     -fx-font-family: Helvetica;
     -fx-font-size: 22;

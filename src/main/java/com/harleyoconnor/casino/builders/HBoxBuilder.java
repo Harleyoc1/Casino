@@ -30,7 +30,7 @@ public final class HBoxBuilder<T extends HBox> extends PaneBuilder<T, HBoxBuilde
         return this;
     }
 
-    public static HBoxBuilder<HBox> createHBox () {
+    public static HBoxBuilder<HBox> create() {
         return new HBoxBuilder<>(new HBox());
     }
 

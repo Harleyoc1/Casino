@@ -7,7 +7,6 @@ import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.GameHolder;
 import com.harleyoconnor.casino.games.Games;
 import com.harleyoconnor.casino.games.Player;
-import com.harleyoconnor.casino.textures.cards.Cards;
 import com.harleyoconnor.casino.users.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,8 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -56,22 +53,22 @@ public final class GamesMenuScreen extends MenuScreen {
         this.setupGameButtons(); // Sets up the game buttons.
 
         // Creates an HBox for the game buttons.
-        final HBox gameButtonHBox = HBoxBuilder.createHBox().add(this.gameButtons.values().toArray(new Button[0])).centre()
+        final HBox gameButtonHBox = HBoxBuilder.create().add(this.gameButtons.values().toArray(new Button[0])).centre()
                 .padding(15, 0, 15, 0).build();
 
         // Sets up the nodes that display when a game is selected.
         this.betAmountField = TextFieldBuilder.createTextField().placeholder("BTC").body().fixWidth(60).build();
-        this.errorLabel = LabelBuilder.createLabel().wrapText().body().build();
-        final Button startGameButton = ButtonBuilder.createButton().text("Start").body().fixWidth(60).onAction(this::onStartGamePressed).build();
+        this.errorLabel = LabelBuilder.create().wrapText().body().build();
+        final Button startGameButton = ButtonBuilder.create().text("Start").body().fixWidth(60).onAction(this::onStartGamePressed).build();
 
         // Groups the nodes for when a game is selected into a VBox and manages padding and alignment for them.
-        this.buttonSelectedGroup = VBoxBuilder.createVBox().add(
-                HBoxBuilder.createHBox().add(this.betAmountField).centre().padding(6).build(),
-                HBoxBuilder.createHBox().add(this.errorLabel).centre().padding(6).build(),
-                HBoxBuilder.createHBox().add(startGameButton).centre().padding(6).build()).build();
+        this.buttonSelectedGroup = VBoxBuilder.create().add(
+                HBoxBuilder.create().add(this.betAmountField).centre().padding(6).build(),
+                HBoxBuilder.create().add(this.errorLabel).centre().padding(6).build(),
+                HBoxBuilder.create().add(startGameButton).centre().padding(6).build()).build();
 
         // Creates and returns a VBox as the main layout.
-        return VBoxBuilder.createVBox().add(gameButtonHBox).centre().padding(25).build();
+        return VBoxBuilder.create().add(gameButtonHBox).centre().padding(25).build();
     }
 
     /**
@@ -82,7 +79,7 @@ public final class GamesMenuScreen extends MenuScreen {
         this.gameButtons = new HashMap<>();
 
         Games.GAMES.forEach(gameHolder -> {
-            final Button gameButton = ButtonBuilder.createButton().text(gameHolder.getName()).styleClasses(GAME_BUTTON_CLASS, AppConstants.INVISIBLE_BUTTON_CLASS)
+            final Button gameButton = ButtonBuilder.create().text(gameHolder.getName()).styleClasses(GAME_BUTTON_CLASS, AppConstants.INVISIBLE_BUTTON_CLASS)
                     .title().fixWidthHeight(150).onAction(event -> this.onGamePressed(gameHolder)).build();
             this.gameButtons.put(gameHolder, gameButton);
         });
