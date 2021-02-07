@@ -21,6 +21,15 @@ public final class HBoxBuilder<T extends HBox> extends PaneBuilder<T, HBoxBuilde
         return this;
     }
 
+    public HBoxBuilder<T> spacing() {
+        return this.spacing(5);
+    }
+
+    public HBoxBuilder<T> spacing(int amount) {
+        this.node.setSpacing(amount);
+        return this;
+    }
+
     public static HBoxBuilder<HBox> createHBox () {
         return new HBoxBuilder<>(new HBox());
     }

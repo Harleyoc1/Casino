@@ -1,23 +1,17 @@
 package com.harleyoconnor.casino.menus;
 
-import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
-import com.harleyoconnor.casino.builders.ButtonBuilder;
-import com.harleyoconnor.casino.builders.LabelBuilder;
+import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.users.PasswordHandler;
 import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
 import com.harleyoconnor.casino.utils.InterfaceUtils;
-import com.harleyoconnor.casino.builders.TextFieldBuilder;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -37,14 +31,10 @@ public final class SignUpScreen extends MenuScreen {
 
     @Override
     protected Pane setupScreen() {
-        Pane layout = new StackPane();
-
-        // Create a vertical box for content with a fixed width of 300.
-        VBox vBox = InterfaceUtils.fixWidth(new VBox(5), 300);
-
+        // Create title label.
         final Label titleLabel = LabelBuilder.createLabel().text("Sign Up").title().wrapText().build();
 
-        // Create fields.
+        // Create fields for username, password, and password confirmation.
         this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
         this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").build();
         this.confirmPasswordField = TextFieldBuilder.createPasswordField().placeholder("Confirm Password").build();
@@ -58,18 +48,13 @@ public final class SignUpScreen extends MenuScreen {
         // Create sign in button - this will redirect the user to the sign in screen.
         Button signInButton = ButtonBuilder.createButton().text("Sign In").onAction(this::onSignInPress).build();
 
-        // Add content to the vertical box.
-        InterfaceUtils.centreElementsVertically(InterfaceUtils.addElementsToPane(vBox, titleLabel, this.usernameField, this.passwordField, this.confirmPasswordField,
-                InterfaceUtils.addElementsToPane(new HBox(), signInButton, InterfaceUtils.createHorizontalSpacer(), signUpButton),
-                this.errorLabel));
+        // Create vertical box and add the content to it.
+        VBox vBox = VBoxBuilder.createVBox().add(titleLabel, this.usernameField, this.passwordField, this.confirmPasswordField,
+                HBoxBuilder.createHBox().add(signInButton, InterfaceUtils.createHorizontalSpacer(), signUpButton).build(), this.errorLabel)
+                .spacing().padding(25).fixWidth(300).build();
 
-        // Set padding for the layout.
-        layout.setPadding(new Insets(25));
-
-        // Add vertical box to the layout in the horizontal centre of the screen.
-        InterfaceUtils.addElementsToPane(layout, InterfaceUtils.centreElementsHorizontally(InterfaceUtils.addElementsToPane(new HBox(), vBox)));
-
-        return layout;
+        // Create and return horizontal box with vertical box of content in the centre.
+        return HBoxBuilder.createHBox().add(vBox).centre().build();
     }
 
     /**

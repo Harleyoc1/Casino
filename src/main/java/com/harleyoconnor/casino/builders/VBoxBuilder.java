@@ -22,6 +22,15 @@ public final class VBoxBuilder<T extends VBox> extends PaneBuilder<T, VBoxBuilde
         return this;
     }
 
+    public VBoxBuilder<T> spacing() {
+        return this.spacing(5);
+    }
+
+    public VBoxBuilder<T> spacing(int amount) {
+        this.node.setSpacing(amount);
+        return this;
+    }
+
     public static VBoxBuilder<VBox> createVBox() {
         return new VBoxBuilder<>(new VBox());
     }
