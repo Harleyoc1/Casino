@@ -30,4 +30,9 @@ public final class AppConstants {
     public static final String BODY_CLASS = "body";
     public static final String INVISIBLE_BUTTON_CLASS = "invisible-button";
 
+
+    // Default window settings.
+    public static final int DEFAULT_WIDTH = 500;
+    public static final int DEFAULT_HEIGHT = 300;
+
 }

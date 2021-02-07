@@ -72,6 +72,14 @@ public final class SignUpScreen extends MenuScreen {
         return layout;
     }
 
+    /**
+     * Executes when the sign up button is pressed. Checks if a username was entered and doesn't already exist,
+     * if the passwords in the password and confirm password match, and if the minimum password length was met.
+     * If any of those conditions weren't met, the <tt>errorLabel</tt> is updated and we return, otherwise we
+     * create and register the new user and open the game menu.
+     *
+     * @param event The {@link ActionEvent}.
+     */
     private void onSignUpPress(ActionEvent event) {
         String username = this.usernameField.getText();
 
@@ -111,6 +119,11 @@ public final class SignUpScreen extends MenuScreen {
         new GamesMenuScreen(this.casino, this.stage, this.scene, this).show();
     }
 
+    /**
+     * Executes when the sign in button is pressed. Sends the user back to the sign in screen.
+     *
+     * @param event The {@link ActionEvent}.
+     */
     private void onSignInPress (ActionEvent event) {
         if (this.previousScreen instanceof SignInScreen)
             this.previousScreen.show();

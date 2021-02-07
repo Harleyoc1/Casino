@@ -65,8 +65,7 @@ public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
      * @return This node builder.
      */
     public V fixWidthHeight (int widthAndHeight) {
-        this.fixWidthHeight(widthAndHeight, widthAndHeight);
-        return (V) this;
+        return this.fixWidthHeight(widthAndHeight, widthAndHeight);
     }
 
     /**
@@ -78,8 +77,7 @@ public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
      */
     public V fixWidthHeight (int width, int height) {
         this.fixWidth(width);
-        this.fixHeight(height);
-        return (V) this;
+        return this.fixHeight(height);
     }
 
     /**

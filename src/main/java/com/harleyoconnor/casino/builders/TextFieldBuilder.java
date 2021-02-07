@@ -4,6 +4,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
+ * A helper class that helps easily construct {@link TextField} objects.
+ *
  * @author Harley O'Connor
  */
 public final class TextFieldBuilder<T extends TextField> extends NodeBuilder<T, TextFieldBuilder<T>> {

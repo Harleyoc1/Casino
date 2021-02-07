@@ -3,6 +3,8 @@ package com.harleyoconnor.casino.builders;
 import javafx.scene.control.Label;
 
 /**
+ * A helper class that helps easily construct {@link Label} objects.
+ *
  * @author Harley O'Connor
  */
 public final class LabelBuilder<T extends Label> extends NodeBuilder<T, LabelBuilder<T>> {

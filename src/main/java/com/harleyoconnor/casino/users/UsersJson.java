@@ -30,11 +30,12 @@ public final class UsersJson {
     // A tab of space for making the Json more readable.
     private static final String SPACE = "   ";
 
+    // The path of the users Json file.
     private static final String USERS_PATH = AppConstants.DATA_PATH + "users.json";
 
-    private final JSONParser parser = new JSONParser();
-    private final JSONArray usersList;
-    private final File usersFile;
+    private final JSONParser parser = new JSONParser(); // The Json parser instance.
+    private final JSONArray usersList; // The list of users.
+    private final File usersFile; // The Json file object.
 
     public UsersJson() {
         this.usersFile = FileUtils.getFile(USERS_PATH, false);
@@ -163,6 +164,12 @@ public final class UsersJson {
         return (T) object;
     }
 
+    /**
+     * Writes the user data given to the users Json file. Note that this is writing the data, not merging it
+     * with the current contents of the file, so the full list is needed.
+     *
+     * @param users The list of users.
+     */
     public void writeUserData (List<User> users) {
         StringBuilder dataBuilder = new StringBuilder();
 
@@ -175,9 +182,10 @@ public final class UsersJson {
             // Create opening curly brace for current user's Json object.
             dataBuilder.append(SPACE + "{\n");
 
-            this.writeValue(dataBuilder, USERNAME_KEY, "\"" + user.getUsername() + "\"", false);
-            this.writeValue(dataBuilder, PASSWORD_KEY, "\"" + user.getPasswordHandler().getPassword() + "\"", false);
-            this.writeValue(dataBuilder, BALANCE_KEY, Long.toString(user.getBitcoins()), true);
+            // Write keys and values for the username, password, and balance.
+            this.appendJsonElement(dataBuilder, USERNAME_KEY, "\"" + user.getUsername() + "\"", false);
+            this.appendJsonElement(dataBuilder, PASSWORD_KEY, "\"" + user.getPasswordHandler().getPassword() + "\"", false);
+            this.appendJsonElement(dataBuilder, BALANCE_KEY, Long.toString(user.getBitcoins()), true);
 
             // Create closing curly brace for current user's Json object.
             dataBuilder.append(SPACE + "}").append(i == users.size() - 1 ? "" : ",").append("\n");
@@ -189,15 +197,31 @@ public final class UsersJson {
         this.writeData(dataBuilder.toString());
     }
 
-    private void writeValue (StringBuilder builder, String key, String value, boolean lastOfObject) {
+    /**
+     * Appends a Json element to the given builder from the given key and value. Also appends an EOL and a
+     * comma if lastOfObject is true.
+     *
+     * @param builder The String Builder to append to.
+     * @param key The key of the Json element.
+     * @param value The value of the Json element.
+     * @param lastOfObject True if it is the last element of the object, false if not.
+     */
+    private void appendJsonElement(StringBuilder builder, String key, String value, boolean lastOfObject) {
         builder.append(SPACE + SPACE).append("\"").append(key).append("\": ").append(value).append(lastOfObject ? "" : ",").append("\n");
     }
 
+    /**
+     * Writes the string of data given to the users Json file.
+     *
+     * @param dataToWrite The String of Json data.
+     */
     private void writeData (String dataToWrite) {
         try {
+            // Create the buffered writer, which will handle writing data to the users file.
             BufferedWriter writer = Files.newBufferedWriter(this.usersFile.toPath(), StandardCharsets.UTF_8);
-            writer.write(dataToWrite);
-            writer.close();
+
+            writer.write(dataToWrite); // Write the actual data.
+            writer.close(); // Close the writer to tell the OS we have finished writing to it (and to clean it for GC).
         } catch (IOException e) {
             throw new RuntimeException("Error writing user data to file.");
         }

@@ -9,6 +9,8 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 
 /**
+ * This class handles holding, hashing, and authenticating passwords.
+ *
  * @author Harley O'Connor
  */
 public final class PasswordHandler {

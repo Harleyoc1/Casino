@@ -5,6 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 /**
+ * A helper class that helps easily construct {@link Button} objects.
+ *
  * @author Harley O'Connor
  */
 public final class ButtonBuilder<T extends Button> extends NodeBuilder<T, ButtonBuilder<T>> {

@@ -6,11 +6,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
+ * Holds information about each game, and handles constructing them.
+ *
  * @author Harley O'Connor
  */
 public abstract class GameHolder<T extends Game> {
 
-    private final String name;
+    protected final String name;
 
     public GameHolder(String name) {
         this.name = name;
@@ -20,6 +22,16 @@ public abstract class GameHolder<T extends Game> {
         return name;
     }
 
+    /**
+     * This should construct the {@link Game} object.
+     *
+     * @param casino The {@link Casino} instance.
+     * @param stage The primary {@link Stage}.
+     * @param scene The main {@link Scene}.
+     * @param previousScreen The previous {@link MenuScreen}.
+     * @param player The {@link Player} object.
+     * @return The {@link Game} object.
+     */
     public abstract T construct (Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player);
 
 }

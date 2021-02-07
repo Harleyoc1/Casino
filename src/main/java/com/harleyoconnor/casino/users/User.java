@@ -1,6 +1,8 @@
 package com.harleyoconnor.casino.users;
 
 /**
+ * Stores user information, including the username, {@link PasswordHandler}, and balance.
+ *
  * @author Harley O'Connor
  */
 public class User {
