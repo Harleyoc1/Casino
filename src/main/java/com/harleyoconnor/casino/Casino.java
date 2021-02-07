@@ -1,7 +1,7 @@
 package com.harleyoconnor.casino;
 
 import com.harleyoconnor.casino.menus.GamesMenuScreen;
-import com.harleyoconnor.casino.menus.SignInScreen;
+import com.harleyoconnor.casino.textures.cards.Cards;
 import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
 import com.harleyoconnor.javautilities.FileUtils;
@@ -29,6 +29,7 @@ public final class Casino extends Application {
         INSTANCE = this;
 
         Users.getFromFile();
+        Cards.loadAndRegisterCards();
 
         this.primaryStage = primaryStage;
         this.primaryScene = new Scene(new StackPane());
@@ -40,8 +41,8 @@ public final class Casino extends Application {
 
         // Creates and shows the sign in screen.
 //        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
-        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, null).show();
         this.setCurrentUser(Users.find("Harleyoc1").get());
+        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, null).show();
 
         primaryStage.setScene(this.primaryScene);
         primaryStage.show();

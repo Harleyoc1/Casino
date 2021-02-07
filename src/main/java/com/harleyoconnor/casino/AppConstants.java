@@ -18,6 +18,8 @@ public final class AppConstants {
     public static final String FILE_PREFIX = "file:";
 
     // Directory paths.
+    public static final String ASSETS_PATH = FileUtils.ASSETS_PATH;
+    public static final String TEXTURES_PATH = ASSETS_PATH + "textures/";
     public static final String DATA_PATH = FileUtils.RESOURCES_PATH + "data/";
     public static final String STYLESHEETS_PATH = "stylesheets/";
 

@@ -7,6 +7,7 @@ import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.GameHolder;
 import com.harleyoconnor.casino.games.Games;
 import com.harleyoconnor.casino.games.Player;
+import com.harleyoconnor.casino.textures.cards.Cards;
 import com.harleyoconnor.casino.users.User;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -68,7 +71,7 @@ public final class GamesMenuScreen extends MenuScreen {
                 HBoxBuilder.createHBox().add(startGameButton).centre().padding(6).build()).build();
 
         // Creates and returns a VBox as the main layout.
-        return VBoxBuilder.createVBox().add(gameButtonHBox).padding(25).build();
+        return VBoxBuilder.createVBox().add(gameButtonHBox).centre().padding(25).build();
     }
 
     /**

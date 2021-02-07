@@ -1,13 +1,16 @@
 package com.harleyoconnor.casino.games.blackjack;
 
 import com.harleyoconnor.casino.Casino;
+import com.harleyoconnor.casino.builders.HBoxBuilder;
+import com.harleyoconnor.casino.builders.LabelBuilder;
 import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.Games;
 import com.harleyoconnor.casino.games.Player;
 import com.harleyoconnor.casino.menus.MenuScreen;
+import com.harleyoconnor.casino.textures.cards.Cards;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -21,9 +24,11 @@ public final class BlackJack extends Game {
 
     @Override
     protected Pane setupScreen() {
-        final Pane layout = new StackPane();
+        ImageView card = new ImageView(Cards.CARD_TEXTURES.get(Cards.CARDS.get(0)));
+        card.setPreserveRatio(true);
+        card.setFitWidth(100);
 
-        return layout;
+        return HBoxBuilder.createHBox().add(card, LabelBuilder.createLabel().text("Hello?").build()).centre().build();
     }
 
 }
