@@ -42,7 +42,7 @@ public final class SignInScreen extends MenuScreen {
         // Create a vertical box for content with a fixed width of 300.
         VBox vBox = InterfaceUtils.fixWidth(new VBox(5), 300);
 
-        final Label titleLabel = LabelBuilder.createLabel().text("Sign In").styleClasses(AppConstants.TITLE_CLASS).wrapText().build();
+        final Label titleLabel = LabelBuilder.createLabel().text("Sign In").title().wrapText().build();
 
         // Create fields.
         this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();

@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino;
 
+import com.harleyoconnor.casino.menus.GamesMenuScreen;
 import com.harleyoconnor.casino.menus.SignInScreen;
 import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
@@ -38,7 +39,9 @@ public final class Casino extends Application {
         this.setupBasicProperties();
 
         // Creates and shows the sign in screen.
-        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
+//        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
+        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, null).show();
+        this.setCurrentUser(Users.find("Harleyoc1").get());
 
         primaryStage.setScene(this.primaryScene);
         primaryStage.show();
@@ -48,8 +51,13 @@ public final class Casino extends Application {
      * Sets up basic properties for the main {@link Stage}.
      */
     private void setupBasicProperties () {
+        // Set minimum and default widths and heights.
+        this.primaryStage.setMinWidth(AppConstants.MIN_WIDTH);
+        this.primaryStage.setMinHeight(AppConstants.MIN_HEIGHT);
         this.primaryStage.setWidth(AppConstants.DEFAULT_WIDTH);
         this.primaryStage.setHeight(AppConstants.DEFAULT_HEIGHT);
+
+        // Set the title of the scene.
         this.setTitle();
     }
 

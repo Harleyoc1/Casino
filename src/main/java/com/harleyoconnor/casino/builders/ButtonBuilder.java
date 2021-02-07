@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
  *
  * @author Harley O'Connor
  */
-public final class ButtonBuilder<T extends Button> extends NodeBuilder<T, ButtonBuilder<T>> {
+public final class ButtonBuilder<T extends Button> extends RegionBuilder<T, ButtonBuilder<T>> {
 
     public ButtonBuilder(T node) {
         super(node);

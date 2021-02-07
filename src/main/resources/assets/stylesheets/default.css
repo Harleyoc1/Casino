@@ -8,12 +8,30 @@
     -fx-font-size: 14;
 }
 
+.button {
+    -fx-cursor: hand;
+    -fx-border-color: black;
+    -fx-background-color: none;
+}
+
+.game-button, .game-button:hover {
+    -fx-border-color: green !important;
+    -fx-border-radius: 8px;
+    -fx-border-width: 5px;
+    -fx-text-fill: green;
+    -fx-font-size: 16;
+}
+
+.game-button-selected, .game-button-selected:hover {
+    -fx-border-color: lightgreen !important;
+    -fx-text-fill: lightgreen;
+}
+
 .invisible-button {
     -fx-background-color: none;
 }
 
 .invisible-button:hover {
-    -fx-cursor: hand;
     -fx-background-color: none;
     -fx-border-color: none;
 }

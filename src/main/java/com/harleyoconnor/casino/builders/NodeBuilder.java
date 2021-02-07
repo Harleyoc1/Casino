@@ -1,5 +1,7 @@
 package com.harleyoconnor.casino.builders;
 
+import com.harleyoconnor.casino.AppConstants;
+import javafx.geometry.Insets;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
 
@@ -11,6 +13,8 @@ import javafx.scene.Node;
 @SuppressWarnings("unchecked") // These warnings are invalid considering this is an abstract class, so ignore them.
 public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
 
+    // TODO: Make extension "RegionBuilder" to fix the mess of checking instanceof for some methods.
+
     protected final T node;
 
     public NodeBuilder(T node) {
@@ -18,10 +22,10 @@ public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
     }
 
     /**
-     * Adds style classes to node.
+     * Adds style classes to the {@link Node}.
      *
      * @param styleClassIds The style classes to add.
-     * @return This node builder.
+     * @return This {@link Node} builder.
      */
     public V styleClasses(String... styleClassIds) {
         this.node.getStyleClass().addAll(styleClassIds);
@@ -29,59 +33,25 @@ public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> {
     }
 
     /**
-     * Fixes width of node by setting max and min width to width given, if node is a {@link Region}.
+     * Adds title style class to the {@link Node}.
      *
-     * @param width The width to fix.
-     * @return This node builder.
+     * @return This {@link Node} builder.
      */
-    public V fixWidth (int width) {
-        if (this.node instanceof Region) {
-            Region region = (Region) this.node;
-            region.setMinWidth(width);
-            region.setMaxWidth(width);
-        }
-        return (V) this;
+    public V title() {
+        return this.styleClasses(AppConstants.TITLE_CLASS);
     }
 
     /**
-     * Fixes height of node to height given, if node is a {@link Region}.
+     * Adds body style class to the {@link Node}.
      *
-     * @param height The height to fix.
-     * @return This node builder.
+     * @return This {@link Node} builder.
      */
-    public V fixHeight (int height) {
-        if (this.node instanceof Region) {
-            Region region = (Region) this.node;
-            region.setMinHeight(height);
-            region.setMaxHeight(height);
-        }
-        return (V) this;
+    public V body() {
+        return this.styleClasses(AppConstants.BODY_CLASS);
     }
 
     /**
-     * Fixes both width and height of node to given value, if node is a {@link Region}.
-     *
-     * @param widthAndHeight The height and width to fix.
-     * @return This node builder.
-     */
-    public V fixWidthHeight (int widthAndHeight) {
-        return this.fixWidthHeight(widthAndHeight, widthAndHeight);
-    }
-
-    /**
-     * Fixes both width and height of node to given width and height, if node is a {@link Region}.
-     *
-     * @param width The width to fix.
-     * @param height The height to fix.
-     * @return This node builder.
-     */
-    public V fixWidthHeight (int width, int height) {
-        this.fixWidth(width);
-        return this.fixHeight(height);
-    }
-
-    /**
-     * @return The node that's been configured.
+     * @return The {@link Node} that's been configured.
      */
     public T build () {
         return this.node;

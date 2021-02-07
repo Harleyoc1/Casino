@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
  *
  * @author Harley O'Connor
  */
-public final class LabelBuilder<T extends Label> extends NodeBuilder<T, LabelBuilder<T>> {
+public final class LabelBuilder<T extends Label> extends RegionBuilder<T, LabelBuilder<T>> {
 
     public LabelBuilder(T label) {
         super(label);
