@@ -10,15 +10,14 @@ import com.harleyoconnor.casino.textures.cards.CardDeck;
 import com.harleyoconnor.casino.textures.cards.CardState;
 import com.harleyoconnor.casino.textures.cards.Cards;
 import com.harleyoconnor.casino.utils.InterfaceUtils;
-import com.harleyoconnor.javautilities.IntegerUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -36,6 +35,8 @@ public final class BlackJack extends Game {
     private List<CardState> dealerCards;
     private List<CardState> playerCards;
 
+    private boolean oneDealerCardLeftHidden;
+
     public BlackJack(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
         super(casino, stage, scene, previousScreen, player, Games.BLACKJACK);
     }
@@ -48,12 +49,13 @@ public final class BlackJack extends Game {
         this.dealerCards = new ArrayList<>();
         this.playerCards = new ArrayList<>();
 
+        this.oneDealerCardLeftHidden = false;
+
         this.dealerCards.addAll(this.deck.select(2)); // Select random cards for the dealer.
-        this.dealerCards.get(IntegerUtils.getRandomIntBetween(0, this.dealerCards.size() - 1)).setHidden(true); // Hide one of the dealer's cards.
 
         HBoxBuilder<HBox> dealerCardsDisplayBuilder = HBoxBuilder.create();
 
-        this.dealerCards.forEach(cardState -> dealerCardsDisplayBuilder.add(this.createCardView(cardState)));
+        this.dealerCards.forEach(cardState -> dealerCardsDisplayBuilder.add(this.createCardView(cardState, true)));
 
         HBox dealersCardsDisplay = dealerCardsDisplayBuilder.spacing(10).padding().centre().build();
 
@@ -77,17 +79,24 @@ public final class BlackJack extends Game {
                 .centre().styleClasses("green").build();
     }
 
-    private ImageView createCardView(CardState cardState) {
-        // Create the image view for the card and add it to the horizontal box containing the user's cards.
-        ImageView cardImage = ImageViewBuilder.create().image(cardState.isHidden() ? Cards.CARD_BACK_TEXTURE : Cards.CARD_TEXTURES.get(cardState.getCard()))
-                .height(160).preserveRatio().translateY(-this.scene.getHeight()).build();
+    private StackPane createCardView(CardState cardState) {
+        return this.createCardView(cardState, false);
+    }
+
+    private StackPane createCardView(CardState cardState, boolean dealerCard) {
+        StackPane cardView = StackPaneBuilder.edit(cardState.createAndConfigureView()).translateY(-this.scene.getHeight()).build();
 
         // Set up animations for the card.
         int nextIndex = this.timelines.size() + 1;
-        this.timelines.add(TimelineBuilder.create().keyFrame(1500, cardImage.translateYProperty(), 0, Interpolator.EASE_BOTH)
-                .onFinished(event -> this.playAnimation(nextIndex)).build());
+        this.timelines.add(TimelineBuilder.create().keyFrame(1500, cardView.translateYProperty(), 0, Interpolator.EASE_BOTH)
+                .onFinished(event -> {
+                    if (dealerCard && !this.oneDealerCardLeftHidden)
+                        this.oneDealerCardLeftHidden = true;
+                    else cardState.flip();
+                    this.playAnimation(nextIndex);
+                }).build());
 
-        return cardImage;
+        return cardView;
     }
 
     private String getValueLabelText () {

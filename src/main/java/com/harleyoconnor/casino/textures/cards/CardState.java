@@ -1,32 +1,84 @@
 package com.harleyoconnor.casino.textures.cards;
 
+import com.harleyoconnor.casino.animations.FlipAnimation;
+import com.harleyoconnor.casino.builders.ImageViewBuilder;
+import com.harleyoconnor.casino.builders.StackPaneBuilder;
+import javafx.scene.Group;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Holds card information and views.
+ *
  * @author Harley O'Connor
  */
 public final class CardState {
 
+    /** Height of the cards. */
+    public static final int CARD_HEIGHT = 160;
+    /** Duration of the flip animation (in milliseconds). */
+    public static final int FLIP_DURATION = 2000;
+
     private final Card card;
-    private boolean hidden;
+    private boolean flipped = true;
 
-    public CardState(Card card, boolean hidden) {
+    // Views
+    private FlipAnimation<ImageView> flipAnimation = null;
+    private StackPane viewsHolder = null;
+
+    public CardState(Card card) {
         this.card = card;
-        this.hidden = hidden;
+
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public StackPane createAndConfigureView() {
+        StackPaneBuilder<StackPane> viewBuilder = StackPaneBuilder.create().minHeight(CARD_HEIGHT);
+        final ImageView frontView = this.createFrontView();
+        final ImageView backView = this.createBackView();
+
+        viewBuilder.add(frontView, backView);
+
+        this.viewsHolder = viewBuilder.build();
+        this.flipAnimation = new FlipAnimation<>(frontView, backView, this.viewsHolder, FLIP_DURATION);
+
+        return this.viewsHolder;
     }
 
-    public CardState setHidden(boolean hidden) {
-        this.hidden = hidden;
-        return this;
+    /**
+     * Toggles <tt>this.flipped</tt> and tells the {@link FlipAnimation} object (if it has been created)
+     * to play the card flip animation.
+     */
+    public void flip() {
+        this.flipped = !this.flipped;
+
+        if (this.flipAnimation != null)
+            this.flipAnimation.flip();
+    }
+
+    public ImageView createFrontView () {
+        return ImageViewBuilder.create().image(this.card.getTexture()).height(CARD_HEIGHT).preserveRatio().build();
+    }
+
+    public ImageView createBackView () {
+        return ImageViewBuilder.create().image(Cards.CARD_BACK_TEXTURE).height(CARD_HEIGHT).preserveRatio().build();
     }
 
     public Card getCard() {
         return card;
+    }
+
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    @Nullable
+    public StackPane getViewsHolder() {
+        return viewsHolder;
     }
 
     /**

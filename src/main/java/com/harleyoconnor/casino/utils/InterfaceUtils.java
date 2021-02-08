@@ -48,9 +48,15 @@ public final class InterfaceUtils {
         return pane;
     }
 
-    public static <T extends Region> T fixWidth (final T region, final int width) {
+    public static <T extends Region> T fixWidth (final T region, final double width) {
         region.setMinWidth(width);
         region.setMaxWidth(width);
+        return region;
+    }
+
+    public static <T extends Region> T fixHeight(final T region, final double height) {
+        region.setMinHeight(height);
+        region.setMaxHeight(height);
         return region;
     }
 

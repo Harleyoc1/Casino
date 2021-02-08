@@ -1,5 +1,7 @@
 package com.harleyoconnor.casino.textures.cards;
 
+import javafx.scene.image.Image;
+
 /**
  * @author Harley O'Connor
  */
@@ -20,7 +22,14 @@ public final class Card {
      * @return This {@link Card} object's default state.
      */
     public CardState getDefaultState () {
-        return new CardState(this, false);
+        return new CardState(this);
+    }
+
+    /**
+     * @return The {@link Image} object from {@link Cards}.<tt>CARD_TEXTURES</tt> for this card.
+     */
+    public Image getTexture () {
+        return Cards.CARD_TEXTURES.get(this);
     }
 
     /**
@@ -51,9 +60,9 @@ public final class Card {
         EIGHT(8),
         NINE(9),
         TEN(10),
-        JACK(11, "J"),
-        QUEEN(12, "Q"),
-        KING(13, "K");
+        JACK(10, "J"),
+        QUEEN(10, "Q"),
+        KING(10, "K");
 
         /** The rank's actual integer value (from 1-13). */
         private final int value;

@@ -47,6 +47,28 @@ public abstract class RegionBuilder<T extends Region, V extends RegionBuilder<T,
     }
 
     /**
+     * Sets the minimum width of the {@link Region} to the given width.
+     *
+     * @param width The width to set as a minimum.
+     * @return This {@link Region} builder.
+     */
+    public V minWidth (int width) {
+        this.node.setMinWidth(width);
+        return (V) this;
+    }
+
+    /**
+     * Sets the minimum height of the {@link Region} to the given height.
+     *
+     * @param height The height to set as a minimum.
+     * @return This {@link Region} builder.
+     */
+    public V minHeight (int height) {
+        this.node.setMinHeight(height);
+        return (V) this;
+    }
+
+    /**
      * Fixes width of the {@link Region} by setting max and min width to width given.
      *
      * @param width The width to fix.
