@@ -31,6 +31,7 @@ public final class AppConstants {
     public static final String TITLE_CLASS = "title";
     public static final String BODY_CLASS = "body";
     public static final String INVISIBLE_BUTTON_CLASS = "invisible-button";
+    public static final String WHITE_TEXT = "white-text";
 
 
     // Window constants.

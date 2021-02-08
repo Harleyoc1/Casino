@@ -2,7 +2,6 @@ package com.harleyoconnor.casino.builders;
 
 import com.harleyoconnor.casino.AppConstants;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.WritableDoubleValue;
 import javafx.scene.Node;
 
 import javax.annotation.Nonnull;
@@ -14,8 +13,6 @@ import javax.annotation.Nonnull;
  */
 @SuppressWarnings("unchecked") // These warnings are invalid considering this is an abstract class, so ignore them.
 public abstract class NodeBuilder<T extends Node, V extends NodeBuilder<T, V>> implements Builder<T> {
-
-    // TODO: Make extension "RegionBuilder" to fix the mess of checking instanceof for some methods.
 
     protected final T node;
 

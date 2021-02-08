@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.menus;
 
+import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.users.User;
@@ -32,14 +33,14 @@ public final class SignInScreen extends MenuScreen {
     @Override
     protected Pane setupScreen() {
         // Create title label.
-        final Label titleLabel = LabelBuilder.create().text("Sign In").title().wrapText().build();
+        final Label titleLabel = LabelBuilder.create().text("Sign In").title().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create fields for username, password, and password confirmation.
         this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
         this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").build();
 
         // Create error label, for when the user enters details wrong - such as entering an existing username.
-        this.errorLabel = LabelBuilder.create().wrapText().build();
+        this.errorLabel = LabelBuilder.create().body().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create sign up button - this will redirect the user to the sign up screen.
         final Button signUpButton = ButtonBuilder.create().text("Sign Up").onAction(this::onSignUpPress).build();
@@ -50,7 +51,7 @@ public final class SignInScreen extends MenuScreen {
         // Create vertical box and add the content to it.
         VBox vBox = VBoxBuilder.create().add(titleLabel, this.usernameField, this.passwordField,
                 HBoxBuilder.create().add(signUpButton, InterfaceUtils.createHorizontalSpacer(), signInButton).build(), this.errorLabel)
-                .spacing().fixWidth(300).padding(25).build();
+                .spacing().fixWidth(300).padding(25).centre().build();
 
         // Create and return horizontal box with vertical box of content in the centre.
         return HBoxBuilder.create().add(vBox).centre().build();

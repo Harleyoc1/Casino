@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.games.blackjack;
 
+import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.games.Game;
@@ -15,9 +16,11 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -70,13 +73,13 @@ public final class BlackJack extends Game {
         HBox usersCardsDisplay = playerCardsDisplayBuilder.spacing(10).padding().centre().build();
 
         // Components for user's view.
-        Label valueLabel = LabelBuilder.create().text(this.getValueLabelText()).styleClasses("white").body().build();
-        Button hitButton = ButtonBuilder.create().text("Hit").styleClasses("white-button").fixWidth(65).body().build();
-        Button standButton = ButtonBuilder.create().text("Stand").styleClasses("white-button").fixWidth(65).body().build();
+        Label valueLabel = LabelBuilder.create().text(this.getValueLabelText()).styleClasses(AppConstants.WHITE_TEXT).body().build();
+        Button hitButton = ButtonBuilder.create().text("Hit").fixWidth(65).body().build();
+        Button standButton = ButtonBuilder.create().text("Stand").fixWidth(65).body().build();
 
         return VBoxBuilder.create().add(dealersCardsDisplay, InterfaceUtils.createVerticalSpacer(), InterfaceUtils.createVerticalSpacer(), usersCardsDisplay,
                 HBoxBuilder.create().add(valueLabel).centre().build(), HBoxBuilder.create().add(hitButton, standButton).spacing().padding().centre().build())
-                .centre().styleClasses("green").build();
+                .centre().build();
     }
 
     private StackPane createCardView(CardState cardState) {

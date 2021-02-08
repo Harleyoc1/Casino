@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.menus;
 
+import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.users.PasswordHandler;
@@ -32,7 +33,7 @@ public final class SignUpScreen extends MenuScreen {
     @Override
     protected Pane setupScreen() {
         // Create title label.
-        final Label titleLabel = LabelBuilder.create().text("Sign Up").title().wrapText().build();
+        final Label titleLabel = LabelBuilder.create().text("Sign Up").title().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create fields for username, password, and password confirmation.
         this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
@@ -40,7 +41,7 @@ public final class SignUpScreen extends MenuScreen {
         this.confirmPasswordField = TextFieldBuilder.createPasswordField().placeholder("Confirm Password").build();
 
         // Create error label, for when the user enters details wrong - such as entering an existing username.
-        this.errorLabel = LabelBuilder.create().wrapText().build();
+        this.errorLabel = LabelBuilder.create().body().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create sign up button - this will attempt to sign the user up based on the entered data.
         Button signUpButton = ButtonBuilder.create().text("Sign Up").onAction(this::onSignUpPress).build();
@@ -51,7 +52,7 @@ public final class SignUpScreen extends MenuScreen {
         // Create vertical box and add the content to it.
         VBox vBox = VBoxBuilder.create().add(titleLabel, this.usernameField, this.passwordField, this.confirmPasswordField,
                 HBoxBuilder.create().add(signInButton, InterfaceUtils.createHorizontalSpacer(), signUpButton).build(), this.errorLabel)
-                .spacing().padding(25).fixWidth(300).build();
+                .spacing().padding(25).fixWidth(300).centre().build();
 
         // Create and return horizontal box with vertical box of content in the centre.
         return HBoxBuilder.create().add(vBox).centre().build();
