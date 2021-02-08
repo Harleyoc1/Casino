@@ -36,4 +36,8 @@ public final class ImageViewBuilder<T extends ImageView> extends NodeBuilder<T, 
         return new ImageViewBuilder<>(new ImageView());
     }
 
+    public static ImageViewBuilder<ImageView> edit(ImageView imageView) {
+        return new ImageViewBuilder<>(imageView);
+    }
+
 }

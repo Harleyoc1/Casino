@@ -14,15 +14,49 @@ public abstract class MenuScreen {
     protected final Stage stage;
     protected final Scene scene;
     protected final MenuScreen previousScreen;
-    protected final Pane layout;
+    protected Pane layout;
 
+    /**
+     * Simplified constructor which defaults to automatically setting up the screen (calling setupScreen)
+     * and does not have a previous screen.
+     *
+     * @param casino The {@link Casino} object.
+     * @param stage The primary {@link Stage}.
+     * @param scene The main {@link Scene}.
+     */
+    public MenuScreen(Casino casino, Stage stage, Scene scene) {
+        this(casino, stage, scene, null);
+    }
+
+    /**
+     * Simplified constructor which defaults to automatically setting up the screen (calling setupScreen).
+     *
+     * @param casino The {@link Casino} object.
+     * @param stage The primary {@link Stage}.
+     * @param scene The main {@link Scene}.
+     * @param previousScreen The previous {@link MenuScreen} (or null if there wasn't one).
+     */
     public MenuScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen) {
+        this(casino, stage, scene, previousScreen, true);
+    }
+
+    /**
+     * Default constructor for a {@link MenuScreen}.
+     *
+     * @param casino The {@link Casino} object.
+     * @param stage The primary {@link Stage}.
+     * @param scene The main {@link Scene}.
+     * @param previousScreen The previous {@link MenuScreen} (or null if there wasn't one).
+     * @param autoSetUpScreen Whether or not to automatically call setupScreen in the constructor.
+     */
+    public MenuScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, boolean autoSetUpScreen) {
         this.casino = casino;
         this.stage = stage;
         this.scene = scene;
         this.previousScreen = previousScreen;
 
-        this.layout = this.setupScreen();
+        if (autoSetUpScreen)
+            this.layout = this.setupScreen();
     }
 
     /**

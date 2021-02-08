@@ -10,7 +10,7 @@ import com.harleyoconnor.casino.users.User;
 public final class Player extends User {
 
     /** The amount the user has bet on the game. */
-    private final int amountBet;
+    private int amountBet;
 
     public Player(User user, int amountBet) {
         super(user.getUsername(), user.getPasswordHandler());
@@ -19,6 +19,10 @@ public final class Player extends User {
 
     public int getAmountBet() {
         return amountBet;
+    }
+
+    public void setAmountBet(int amountBet) {
+        this.amountBet = amountBet;
     }
 
 }

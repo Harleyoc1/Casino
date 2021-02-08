@@ -41,9 +41,9 @@ public final class Casino extends Application {
         this.setupBasicProperties();
 
         // Creates and shows the sign in screen.
-        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
-//        this.setCurrentUser(Users.find("Harleyoc1").get());
-//        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, null).show();
+//        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
+        this.setCurrentUser(Users.find("Harleyoc1").get());
+        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, null).show();
 
         primaryStage.setScene(this.primaryScene);
         primaryStage.show();

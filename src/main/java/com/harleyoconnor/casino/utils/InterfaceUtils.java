@@ -1,5 +1,8 @@
 package com.harleyoconnor.casino.utils;
 
+import com.harleyoconnor.casino.AppConstants;
+import com.harleyoconnor.casino.builders.HBoxBuilder;
+import com.harleyoconnor.casino.builders.VBoxBuilder;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,15 +12,6 @@ import javafx.scene.layout.*;
  * @author Harley O'Connor
  */
 public final class InterfaceUtils {
-
-    public static ImageView createImageView (final String imagePath, final int height, final int width) {
-        final ImageView imageView = new ImageView(new Image(imagePath));
-
-        imageView.setFitHeight(height);
-        imageView.setFitWidth(width);
-
-        return imageView;
-    }
 
     public static Region createHorizontalSpacer() {
         final Region spacer = new Region();
@@ -31,33 +25,76 @@ public final class InterfaceUtils {
         return spacer;
     }
 
-    public static <T extends HBox> T centreElementsHorizontally (final T hBox) {
-        hBox.getChildren().add(0, createHorizontalSpacer());
-        hBox.getChildren().add(createHorizontalSpacer());
-        return hBox;
+    /**
+     * Puts the given {@link Node} objects into a {@link HBox}, centring them horizontally and
+     * applying the default spacing and padding.
+     *
+     * @param nodes The {@link Node} objects.
+     * @return The {@link HBox} created.
+     */
+    public static HBox centreHorizontally(Node... nodes) {
+        return centreHorizontally(AppConstants.DEFAULT_SPACING, nodes);
     }
 
-    public static <T extends VBox> T centreElementsVertically (final T vBox) {
-        vBox.getChildren().add(0, createVerticalSpacer());
-        vBox.getChildren().add(createVerticalSpacer());
-        return vBox;
+    /**
+     * Puts the given {@link Node} objects into a {@link VBox}, centring them vertically and
+     * applying the default spacing and padding.
+     *
+     * @param nodes The {@link Node} objects.
+     * @return The {@link VBox} created.
+     */
+    public static VBox centreVertically(Node... nodes) {
+        return centreVertically(AppConstants.DEFAULT_SPACING, nodes);
     }
 
-    public static <T extends Pane> T addElementsToPane (final T pane, final Node... nodes) {
-        pane.getChildren().addAll(nodes);
-        return pane;
+    /**
+     * Puts the given {@link Node} objects into a {@link HBox}, centring them horizontally and
+     * applying the given spacing and default padding.
+     *
+     * @param spacing The spacing to apply to the {@link HBox}.
+     * @param nodes The {@link Node} objects.
+     * @return The {@link HBox} created.
+     */
+    public static HBox centreHorizontally(int spacing, Node... nodes) {
+        return centreHorizontally(AppConstants.DEFAULT_PADDING, spacing, nodes);
     }
 
-    public static <T extends Region> T fixWidth (final T region, final double width) {
-        region.setMinWidth(width);
-        region.setMaxWidth(width);
-        return region;
+    /**
+     * Puts the given {@link Node} objects into a {@link VBox}, centring them vertically and
+     * applying the given spacing and default padding.
+     *
+     * @param spacing The spacing to apply to the {@link VBox}.
+     * @param nodes The {@link Node} objects.
+     * @return The {@link VBox} created.
+     */
+    public static VBox centreVertically(int spacing, Node... nodes) {
+        return centreVertically(AppConstants.DEFAULT_PADDING, spacing, nodes);
     }
 
-    public static <T extends Region> T fixHeight(final T region, final double height) {
-        region.setMinHeight(height);
-        region.setMaxHeight(height);
-        return region;
+    /**
+     * Puts the given {@link Node} objects into a {@link HBox}, centring them horizontally and
+     * applying the given spacing and padding.
+     *
+     * @param padding The padding to apply to the {@link HBox}.
+     * @param spacing The spacing to apply to the {@link HBox}.
+     * @param nodes The {@link Node} objects.
+     * @return The {@link HBox} created.
+     */
+    public static HBox centreHorizontally(int padding, int spacing, Node... nodes) {
+        return HBoxBuilder.create().add(nodes).padding(padding).spacing(spacing).centre().build();
+    }
+
+    /**
+     * Puts the given {@link Node} objects into a {@link VBox}, centring them vertically and
+     * applying the given spacing and padding.
+     *
+     * @param padding The padding to apply to the {@link VBox}.
+     * @param spacing The spacing to apply to the {@link VBox}.
+     * @param nodes The {@link Node} objects.
+     * @return The {@link VBox} created.
+     */
+    public static VBox centreVertically(int padding, int spacing, Node... nodes) {
+        return VBoxBuilder.create().add(nodes).padding(padding).spacing(spacing).centre().build();
     }
 
 }

@@ -37,8 +37,13 @@ public final class AppConstants {
     // Window constants.
     public static final int MIN_WIDTH = 500;
     public static final int MIN_HEIGHT = 300;
-    public static final int DEFAULT_WIDTH = 750;
-    public static final int DEFAULT_HEIGHT = 450;
+    public static final int DEFAULT_WIDTH = 900;
+    public static final int DEFAULT_HEIGHT = 540;
+
+
+    // Positioning constants.
+    public static final int DEFAULT_PADDING = 15;
+    public static final int DEFAULT_SPACING = 5;
 
 
     // If the user cannot afford the minimum bet, they must start over.

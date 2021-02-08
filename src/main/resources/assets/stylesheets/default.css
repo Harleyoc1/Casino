@@ -1,12 +1,17 @@
+* {
+    -fx-text-fill: white;
+}
+
 .root {
     -fx-background-image: url("../textures/background.png");
 }
 
-.white-text {
-    -fx-text-fill: white;
-}
+/*.white-text {*/
+/*    -fx-text-fill: white;*/
+/*}*/
 
 .button {
+    -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: white !important;
     -fx-cursor: hand;

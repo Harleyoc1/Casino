@@ -34,4 +34,8 @@ public final class HBoxBuilder<T extends HBox> extends PaneBuilder<T, HBoxBuilde
         return new HBoxBuilder<>(new HBox());
     }
 
+    public static HBoxBuilder<HBox> edit(HBox hBox) {
+        return new HBoxBuilder<>(hBox);
+    }
+
 }

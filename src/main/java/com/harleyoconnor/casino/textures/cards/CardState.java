@@ -3,9 +3,7 @@ package com.harleyoconnor.casino.textures.cards;
 import com.harleyoconnor.casino.animations.FlipAnimation;
 import com.harleyoconnor.casino.builders.ImageViewBuilder;
 import com.harleyoconnor.casino.builders.StackPaneBuilder;
-import javafx.scene.Group;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 import javax.annotation.Nullable;
@@ -19,10 +17,10 @@ import java.util.stream.Collectors;
  */
 public final class CardState {
 
-    /** Height of the cards. */
-    public static final int CARD_HEIGHT = 160;
+    /** Width of the cards. */
+    public static final int CARD_WIDTH = 110;
     /** Duration of the flip animation (in milliseconds). */
-    public static final int FLIP_DURATION = 2000;
+    public static final int FLIP_DURATION = 4000;
 
     private final Card card;
     private boolean flipped = true;
@@ -37,7 +35,7 @@ public final class CardState {
     }
 
     public StackPane createAndConfigureView() {
-        StackPaneBuilder<StackPane> viewBuilder = StackPaneBuilder.create().minHeight(CARD_HEIGHT);
+        StackPaneBuilder<StackPane> viewBuilder = StackPaneBuilder.create().minWidth(CARD_WIDTH);
         final ImageView frontView = this.createFrontView();
         final ImageView backView = this.createBackView();
 
@@ -61,11 +59,11 @@ public final class CardState {
     }
 
     public ImageView createFrontView () {
-        return ImageViewBuilder.create().image(this.card.getTexture()).height(CARD_HEIGHT).preserveRatio().build();
+        return ImageViewBuilder.create().image(this.card.getTexture()).width(CARD_WIDTH).preserveRatio().build();
     }
 
     public ImageView createBackView () {
-        return ImageViewBuilder.create().image(Cards.CARD_BACK_TEXTURE).height(CARD_HEIGHT).preserveRatio().build();
+        return ImageViewBuilder.create().image(Cards.CARD_BACK_TEXTURE).width(CARD_WIDTH).preserveRatio().build();
     }
 
     public Card getCard() {
