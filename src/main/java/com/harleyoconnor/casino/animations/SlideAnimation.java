@@ -9,6 +9,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 
 /**
+ * Animation for handling slides across the screen.
+ *
  * @author Harley O'Connor
  */
 public class SlideAnimation<T extends Node> implements Animation {
@@ -33,6 +35,11 @@ public class SlideAnimation<T extends Node> implements Animation {
         this.animation = this.createAnimation();
     }
 
+    /**
+     * Creates the animation {@link Timeline} object, setting the duration, axis, end value, and interpolator.
+     *
+     * @return The {@link Timeline} object created.
+     */
     private Timeline createAnimation () {
         return TimelineBuilder.create().keyFrame(this.duration, this.axis.getTranslateProperty(this.node), this.endValue, this.interpolator).build();
     }
@@ -49,9 +56,18 @@ public class SlideAnimation<T extends Node> implements Animation {
         return this;
     }
 
+    /**
+     * Holds the axis for which the slide (translation) will happen.
+     */
     public enum TranslateAxis {
         X, Y, Z;
 
+        /**
+         * Gets the {@link DoubleProperty} for the translation for the current Axis object.
+         *
+         * @param node The {@link Node} object.
+         * @return The {@link DoubleProperty} for the translation for the current Axis object.
+         */
         private DoubleProperty getTranslateProperty (Node node) {
             return switch (this) {
                 case X -> node.translateXProperty();

@@ -97,7 +97,7 @@ public class FlipAnimation<T extends Node> implements Animation {
 
     /**
      * Flips the view to the other {@link Node}.
-     * @return
+     * @return This {@link Animation} object.
      */
     @Override
     public Animation play() {

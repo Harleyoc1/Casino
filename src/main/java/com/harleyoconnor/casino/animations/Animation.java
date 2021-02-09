@@ -10,7 +10,7 @@ public interface Animation {
 
     /**
      * Plays the animation.
-     * @return
+     * @return This {@link Animation} object.
      */
     Animation play ();
 
@@ -18,6 +18,7 @@ public interface Animation {
      * Sets an event handler for when the animation has finished.
      *
      * @param eventHandler The event handler to register when finished.
+     * @return This {@link Animation} object.
      */
     Animation setOnFinish (EventHandler<ActionEvent> eventHandler);
 
