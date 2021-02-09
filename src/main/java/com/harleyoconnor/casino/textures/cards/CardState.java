@@ -55,7 +55,7 @@ public final class CardState {
         this.flipped = !this.flipped;
 
         if (this.flipAnimation != null)
-            this.flipAnimation.flip();
+            this.flipAnimation.play();
     }
 
     public ImageView createFrontView () {
@@ -72,6 +72,10 @@ public final class CardState {
 
     public boolean isFlipped() {
         return flipped;
+    }
+
+    public FlipAnimation<ImageView> getFlipAnimation() {
+        return flipAnimation;
     }
 
     @Nullable

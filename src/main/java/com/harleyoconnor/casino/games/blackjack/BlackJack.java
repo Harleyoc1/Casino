@@ -1,7 +1,8 @@
 package com.harleyoconnor.casino.games.blackjack;
 
-import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
+import com.harleyoconnor.casino.animations.Animation;
+import com.harleyoconnor.casino.animations.SlideAnimation;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.Games;
@@ -13,8 +14,8 @@ import com.harleyoconnor.casino.textures.cards.CardDeck;
 import com.harleyoconnor.casino.textures.cards.CardState;
 import com.harleyoconnor.casino.utils.InterfaceUtils;
 import javafx.animation.Interpolator;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public final class BlackJack extends Game {
 
-    private static final int BUTTON_WIDTH = 80;
+    private static final int BUTTON_WIDTH = 120;
 
     /** The {@link CardDeck}, which creating a set of cards to randomly select from. */
     private final CardDeck deck = new CardDeck();
@@ -52,8 +53,8 @@ public final class BlackJack extends Game {
     /** If true, one of the dealer's cards has already been left un-flipped. */
     private boolean oneDealerCardLeftHidden = false;
 
-    /** Holds timelines for animations. */
-    private final List<Timeline> timelines = new ArrayList<>();
+    /** Holds animations. */
+    private final List<Animation> animations = new ArrayList<>();
     /** Holds the index of the next animation to be played. */
     private int nextAnimationIndex = 0;
 
@@ -74,40 +75,52 @@ public final class BlackJack extends Game {
         this.playerCards.forEach(cardState -> this.playerCardsDisplay.add(this.createCardView(cardState)));
 
         // Components for user's view.
-        this.valueLabel.text(this.getValueLabelText()).styleClasses(AppConstants.WHITE_TEXT).body();
-        this.betLabel.text(this.getBetLabelText()).styleClasses(AppConstants.WHITE_TEXT).body();
+        this.valueLabel.text(this.getValueLabelText()).body();
+        this.betLabel.text(this.getBetLabelText()).body();
+
         Button hitButton = ButtonBuilder.create().text("Hit").onAction(this::onHitPress).fixWidth(BUTTON_WIDTH).body().build();
         Button standButton = ButtonBuilder.create().text("Stand").onAction(this::onStandPress).fixWidth(BUTTON_WIDTH).body().build();
-        Button surrenderButton = ButtonBuilder.create().text("Surrender").onAction(this::onQuitPress).fixWidth(BUTTON_WIDTH).build();
+        Button doubleDownButton = ButtonBuilder.create().text("Double Down").onAction(this::onDoubleDownPress).fixWidth(BUTTON_WIDTH).body().build();
+        Button surrenderButton = ButtonBuilder.create().text("Surrender").onAction(this::onSurrenderPress).fixWidth(BUTTON_WIDTH).build();
 
         return VBoxBuilder.create().add(this.dealerCardsDisplay.spacing(10).padding().centre().build(), InterfaceUtils.createVerticalSpacer(),
                 InterfaceUtils.createVerticalSpacer(), this.playerCardsDisplay.spacing(10).padding().centre().build(),
                 InterfaceUtils.centreHorizontally(0, 0, this.valueLabel.build()), InterfaceUtils.centreHorizontally(0, 0, this.betLabel.build()),
-                InterfaceUtils.centreHorizontally(hitButton, standButton, surrenderButton))
+                InterfaceUtils.centreHorizontally(hitButton, standButton, doubleDownButton, surrenderButton))
                 .centre().build();
     }
 
+    /**
+     * Executes when the hit button is pressed, making the player's cards slide right and drawing another
+     * onto their section.
+     *
+     * @param event The {@link ActionEvent}.
+     */
     private void onHitPress (ActionEvent event) {
         if (this.isAnimationPlaying())
             return;
 
-        final CardState cardState = this.deck.select();
+        // Make animation for cards sliding to the left (to make room for new card).
+        this.playerCards.forEach(cardState -> {
+            // Get the view holder for the current card.
+            StackPane cardView = cardState.getViewsHolder();
 
-        this.playerCardsDisplay.build().getChildren().forEach(node -> {
-            if (node instanceof StackPane) {
-                StackPane currentCardView = (StackPane) node;
-                StackPaneBuilder.edit((currentCardView)).translateX(CardState.CARD_WIDTH - 50);
-                this.timelines.add(TimelineBuilder.create().keyFrame(750, currentCardView.translateXProperty(), 0, Interpolator.EASE_BOTH).onFinished(actionEvent -> {
-                    this.playNextAnimation();
-                }).build());
-            }
+            // Translate the card so that it doesn't appear to move when the new card is added.
+            StackPaneBuilder.edit(cardView).translateX(CardState.CARD_WIDTH - 50);
+
+            // Create and add the animation to the animation list.
+            this.animations.add(new SlideAnimation<>(cardView, SlideAnimation.TranslateAxis.X, 0, 750, Interpolator.EASE_BOTH)
+                    .setOnFinish(this::onAnimationFinished));
         });
 
-        this.playerCards.add(cardState);
+        final CardState cardState = this.deck.select(); // Select a new card from the deck.
+        this.playerCards.add(cardState); // Add it to the card list.
+
+        // Insert it into the card display.
         this.playerCardsDisplay.insert(this.createCardView(cardState), this.playerCardsDisplay.build().getChildren().size() - 1);
 
-        this.playNextAnimation();
-        this.valueLabel.text(this.getValueLabelText());
+        this.playNextAnimation(); // Play the animation.
+        this.valueLabel.text(this.getValueLabelText()); // Update the value label.
     }
 
     private void onStandPress (ActionEvent event) {
@@ -115,10 +128,30 @@ public final class BlackJack extends Game {
             return;
     }
 
-    private void onQuitPress (ActionEvent event) {
+    /**
+     * Executes when the double down button is pressed, doubling the player's bet and updating the bet
+     * label with the new amount.
+     *
+     * @param event The {@link ActionEvent}.
+     */
+    private void onDoubleDownPress (ActionEvent event) {
         if (this.isAnimationPlaying())
             return;
 
+        this.player.setAmountBet(this.player.getAmountBet() * 2); // Double the player's bet.
+        this.betLabel.text(this.getBetLabelText()); // Update the bet label to show the new bet value.
+    }
+
+    /**
+     * Executes when the surrender button is pressed, taking the player back to the game menu screen.
+     *
+     * @param event The {@link ActionEvent}.
+     */
+    private void onSurrenderPress(ActionEvent event) {
+        if (this.isAnimationPlaying())
+            return;
+
+        // TODO: Penalty for surrendering.
         new GamesMenuScreen(this.casino, this.stage, this.scene, this).show();
     }
 
@@ -126,19 +159,49 @@ public final class BlackJack extends Game {
         return this.createCardView(cardState, false);
     }
 
+    /**
+     * Creates and configures a view for a card, also creating animations.
+     *
+     * @param cardState The {@link CardState} object for the card.
+     * @param dealerCard If the card being added is the dealer's, this should be true.
+     * @return The configured {@link StackPane} view.
+     */
     private StackPane createCardView(CardState cardState, boolean dealerCard) {
         StackPane cardView = StackPaneBuilder.edit(cardState.createAndConfigureView()).translateY(-this.scene.getHeight()).build();
-
-        // Set up animations for the card.
-        this.timelines.add(TimelineBuilder.create().keyFrame(1500, cardView.translateYProperty(), 0, Interpolator.EASE_BOTH)
-                .onFinished(event -> {
-                    if (dealerCard && !this.oneDealerCardLeftHidden)
-                        this.oneDealerCardLeftHidden = true;
-                    else cardState.flip();
-                    this.playNextAnimation();
-                }).build());
-
+        // Set up card animation, so that it slides in from the top.
+        this.animations.add(new SlideAnimation<>(cardView, SlideAnimation.TranslateAxis.Y, 0, 1500, Interpolator.EASE_BOTH)
+                .setOnFinish(event -> this.onCardAnimationFinished(event, cardState, dealerCard)));
         return cardView;
+    }
+
+    /**
+     * Executes when a card sliding animation has finished, flipping the card (if it should be flipped).
+     *
+     * @param event The {@link ActionEvent}.
+     * @param cardState The {@link CardState} object for the card.
+     * @param dealerCard If the card is the dealer's, this should be true.
+     */
+    private void onCardAnimationFinished (ActionEvent event, CardState cardState, boolean dealerCard) {
+        if (dealerCard && !this.oneDealerCardLeftHidden) {
+            // If the card is the dealer's and we haven't already left one hidden, don't flip the card.
+            this.oneDealerCardLeftHidden = true;
+            // Play the next animation.
+            this.onAnimationFinished(event);
+        } else {
+            // Make sure next animation is played after flip has finished.
+            cardState.getFlipAnimation().setOnFinish(this::onAnimationFinished);
+            // Flip the card and play the flipping animation.
+            cardState.flip();
+        }
+    }
+
+    /**
+     * {@link EventHandler} lambda method that plays the next animation.
+     *
+     * @param event The {@link ActionEvent}.
+     */
+    private void onAnimationFinished (ActionEvent event) {
+        this.playNextAnimation();
     }
 
     /**
@@ -184,27 +247,37 @@ public final class BlackJack extends Game {
     public void show() {
         super.show();
 
-        // Start playing card animations.
-        this.playNextAnimation();
+        this.playNextAnimation(); // Start playing animations.
     }
 
+    /**
+     * @return True if an animation is currently playing.
+     */
     private boolean isAnimationPlaying () {
-        return this.timelines.size() > 0;
+        return this.animations.size() > 0;
     }
 
+    /**
+     * Plays the next animation, or stops playing animations if they have all been played.
+     */
     private void playNextAnimation() {
-        if (this.nextAnimationIndex >= this.timelines.size()) {
-            this.clearTimelines();
+        if (this.nextAnimationIndex >= this.animations.size()) {
+            // If all animations have been played, clear the animations and return.
+            this.clearAnimations();
             return;
         }
 
-        this.timelines.get(this.nextAnimationIndex).play();
+        // Play the next animation and increment the next animation index.
+        this.animations.get(this.nextAnimationIndex).play();
         this.nextAnimationIndex++;
     }
 
-    private void clearTimelines () {
+    /**
+     * Clears animations and resets <tt>nextAnimationIndex</tt>.
+     */
+    private void clearAnimations() {
         this.nextAnimationIndex = 0;
-        this.timelines.clear();
+        this.animations.clear();
     }
 
 }

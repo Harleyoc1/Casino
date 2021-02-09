@@ -7,6 +7,8 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.layout.StackPane;
@@ -19,7 +21,7 @@ import javafx.scene.layout.StackPane;
  *
  * @author Harley O'Connor
  */
-public final class FlipAnimation<T extends Node> {
+public class FlipAnimation<T extends Node> implements Animation {
 
     private static final double PI = Math.PI;
     private static final double HALF_PI = PI / 2;
@@ -95,10 +97,19 @@ public final class FlipAnimation<T extends Node> {
 
     /**
      * Flips the view to the other {@link Node}.
+     * @return
      */
-    public void flip() {
+    @Override
+    public Animation play() {
         this.animation.setRate(this.flippedProperty.get() ? 10 : -10);
         this.animation.play();
+        return this;
+    }
+
+    @Override
+    public Animation setOnFinish(EventHandler<ActionEvent> eventHandler) {
+        this.animation.setOnFinished(eventHandler);
+        return this;
     }
 
     /**
