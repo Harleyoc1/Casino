@@ -7,9 +7,9 @@ package com.harleyoconnor.casino.users;
  */
 public class User {
 
-    private final String username;
-    private final PasswordHandler passwordHandler;
-    private long bitcoins = 1000;
+    protected final String username;
+    protected final PasswordHandler passwordHandler;
+    protected long bitcoins = 1000;
 
     public User(String username, PasswordHandler passwordHandler) {
         this.username = username;

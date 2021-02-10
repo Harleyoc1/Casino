@@ -14,6 +14,8 @@ import com.harleyoconnor.casino.textures.cards.CardDeck;
 import com.harleyoconnor.casino.textures.cards.CardState;
 import com.harleyoconnor.casino.utils.InterfaceUtils;
 import javafx.animation.Interpolator;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -58,6 +60,13 @@ public final class BlackJack extends Game {
     /** Holds the index of the next animation to be played. */
     private int nextAnimationIndex = 0;
 
+    /** Holds the current turn. */
+    private int turnCount = 0;
+
+    private final BooleanProperty surrenderDisabled = new SimpleBooleanProperty(false);
+
+    private boolean playerDrawnOnce = false;
+
     public BlackJack(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
         super(casino, stage, scene, previousScreen, player, Games.BLACKJACK);
     }
@@ -83,6 +92,8 @@ public final class BlackJack extends Game {
         Button doubleDownButton = ButtonBuilder.create().text("Double Down").onAction(this::onDoubleDownPress).fixWidth(BUTTON_WIDTH).body().build();
         Button surrenderButton = ButtonBuilder.create().text("Surrender").onAction(this::onSurrenderPress).fixWidth(BUTTON_WIDTH).build();
 
+        surrenderButton.disableProperty().bind(this.surrenderDisabled);
+
         return VBoxBuilder.create().add(this.dealerCardsDisplay.spacing(10).padding().centre().build(), InterfaceUtils.createVerticalSpacer(),
                 InterfaceUtils.createVerticalSpacer(), this.playerCardsDisplay.spacing(10).padding().centre().build(),
                 InterfaceUtils.centreHorizontally(0, 0, this.valueLabel.build()), InterfaceUtils.centreHorizontally(0, 0, this.betLabel.build()),
@@ -100,32 +111,18 @@ public final class BlackJack extends Game {
         if (this.isAnimationPlaying())
             return;
 
-        // Make animation for cards sliding to the left (to make room for new card).
-        this.playerCards.forEach(cardState -> {
-            // Get the view holder for the current card.
-            StackPane cardView = cardState.getViewsHolder();
-
-            // Translate the card so that it doesn't appear to move when the new card is added.
-            StackPaneBuilder.edit(cardView).translateX(CardState.CARD_WIDTH - 50);
-
-            // Create and add the animation to the animation list.
-            this.animations.add(new SlideAnimation<>(cardView, SlideAnimation.TranslateAxis.X, 0, 750, Interpolator.EASE_BOTH)
-                    .setOnFinish(this::onAnimationFinished));
-        });
-
-        final CardState cardState = this.deck.select(); // Select a new card from the deck.
-        this.playerCards.add(cardState); // Add it to the card list.
-
-        // Insert it into the card display.
-        this.playerCardsDisplay.insert(this.createCardView(cardState), this.playerCardsDisplay.build().getChildren().size() - 1);
-
-        this.playNextAnimation(); // Play the animation.
+        this.drawNewCard(this.playerCards, this.playerCardsDisplay); // Draw a new card.
         this.valueLabel.text(this.getValueLabelText()); // Update the value label.
+
+        this.playerDrawnOnce = true;
+        this.nextTurn();
     }
 
     private void onStandPress (ActionEvent event) {
         if (this.isAnimationPlaying())
             return;
+
+        this.nextTurn();
     }
 
     /**
@@ -135,7 +132,7 @@ public final class BlackJack extends Game {
      * @param event The {@link ActionEvent}.
      */
     private void onDoubleDownPress (ActionEvent event) {
-        if (this.isAnimationPlaying())
+        if (this.isAnimationPlaying() || this.playerDrawnOnce)
             return;
 
         this.player.setAmountBet(this.player.getAmountBet() * 2); // Double the player's bet.
@@ -148,11 +145,75 @@ public final class BlackJack extends Game {
      * @param event The {@link ActionEvent}.
      */
     private void onSurrenderPress(ActionEvent event) {
-        if (this.isAnimationPlaying())
+        if (this.isAnimationPlaying() || this.turnCount > 0)
             return;
 
-        // TODO: Penalty for surrendering.
+        this.player.setAmountBet(this.player.getAmountBet() / 2); // Half the player's bet.
+        this.endGame(EndType.PLAYER_SURRENDER); // End the game.
+
         new GamesMenuScreen(this.casino, this.stage, this.scene, this).show();
+    }
+
+    private void drawNewCard (List<CardState> cardStates, HBoxBuilder<HBox> cardsView) {
+        // Make animation for cards sliding to the left (to make room for new card).
+        cardStates.forEach(cardState -> {
+            // Get the view holder for the current card.
+            StackPane cardView = cardState.getViewsHolder();
+
+            // Translate the card so that it doesn't appear to move when the new card is added.
+            StackPaneBuilder.edit(cardView).translateX(CardState.CARD_WIDTH - 50);
+
+            // Create and add the animation to the animation list.
+            this.animations.add(new SlideAnimation<>(cardView, SlideAnimation.TranslateAxis.X, 0, 750, Interpolator.EASE_BOTH)
+                    .setOnFinish(this::onAnimationFinished));
+        });
+
+        final CardState cardState = this.deck.select(); // Select a new card from the deck.
+        cardStates.add(cardState); // Add it to the card list.
+
+        // Insert it into the card display.
+        cardsView.insert(this.createCardView(cardState), cardsView.build().getChildren().size() - 1);
+
+        if (this.animations.size() <= cardStates.size())
+            this.playNextAnimation(); // Play the animation.
+    }
+
+    private void nextTurn() {
+        int dealerCardValue = this.countCardsValues(this.dealerCards);
+
+        if (dealerCardValue < 17) {
+            // If dealer's card value is less than 17, they hit.
+            this.drawNewCard(this.dealerCards, this.dealerCardsDisplay);
+        }
+        // If dealer's card value is 17 or more, they stand (do nothing).
+
+        // End the game if the dealer has won or bust.
+        this.endGameIfWonOrLost(dealerCardValue, true);
+        this.endGameIfWonOrLost(this.countCardsValues(this.playerCards), false);
+
+        this.turnCount++; // Increment turn count by one.
+
+        if (this.turnCount > 0) {
+            // After the first turn, disable surrender option.
+            this.surrenderDisabled.setValue(true);
+        }
+    }
+
+    /**
+     * If the card value given makes the player or dealer (depending on boolean given) lose or win,
+     * end game with the relevant end type.
+     *
+     * @param cardValue The value of the player/dealer cards.
+     * @param dealer True if the card value given is the dealer's.
+     */
+    private void endGameIfWonOrLost(int cardValue, boolean dealer) {
+        if (cardValue == 21) {
+            // The player/dealer has won - their card value equals 21.
+            this.endGame(dealer ? EndType.DEALER_WON : EndType.PLAYER_WON);
+        } else if (cardValue > 21) {
+            // The player/dealer has bust - they card value has gone over 21.
+            this.endGame(dealer ? EndType.DEALER_BUST : EndType.PLAYER_BUST);
+        }
     }
 
     private StackPane createCardView(CardState cardState) {
@@ -208,7 +269,7 @@ public final class BlackJack extends Game {
      * @return The text to display in the value label.
      */
     private String getValueLabelText() {
-        return "Your Value: " + this.countCardsValues(CardState.getCardList(this.playerCards));
+        return "Your Value: " + this.countCardsValues(this.playerCards);
     }
 
     /**
@@ -219,12 +280,14 @@ public final class BlackJack extends Game {
     }
 
     /**
-     * Counts the value of the {@link Card} objects given, including calculating "hard" and "soft" aces.
+     * Counts the value of the {@link Card} objects from the {@link CardState} objects given,
+     * including calculating "hard" and "soft" aces.
      *
-     * @param cards The {@link List} of {@link Card} objects.
+     * @param cardStates The {@link List} of {@link CardState} objects.
      * @return The total value of the cards.
      */
-    private int countCardsValues (List<Card> cards) {
+    private int countCardsValues (List<CardState> cardStates) {
+        List<Card> cards = CardState.getCardList(cardStates);
         int value = 0, aceCount = 0;
 
         for (Card card : cards) {
@@ -278,6 +341,22 @@ public final class BlackJack extends Game {
     private void clearAnimations() {
         this.nextAnimationIndex = 0;
         this.animations.clear();
+    }
+
+    private void endGame (EndType endType) {
+        if (endType.doesPlayerWinBet()) {
+            this.player.betWon();
+        } else {
+            this.player.betLost();
+        }
+    }
+
+    public enum EndType {
+        PLAYER_WON, PLAYER_BUST, PLAYER_SURRENDER, DEALER_WON, DEALER_BUST;
+
+        public boolean doesPlayerWinBet () {
+            return this == PLAYER_WON || this == DEALER_BUST;
+        }
     }
 
 }

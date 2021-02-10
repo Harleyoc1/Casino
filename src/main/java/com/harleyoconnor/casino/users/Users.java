@@ -48,6 +48,14 @@ public final class Users {
     }
 
     /**
+     * Writes all current user data to the user Json file. This should be called whenever a User object is changed.
+     */
+    public static void updated () {
+        // Update the user Json file.
+        USERS_JSON.writeUserData(USERS);
+    }
+
+    /**
      * Finds the user from the given username if they exist.
      *
      * @param username The username of the user.
