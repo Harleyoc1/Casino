@@ -20,6 +20,13 @@ public final class Player extends User {
         this.amountBet = amountBet;
     }
 
+    /**
+     * Halves the current bet.
+     */
+    public void halfBet () {
+        this.amountBet /= 2;
+    }
+
     public int getAmountBet() {
         return amountBet;
     }

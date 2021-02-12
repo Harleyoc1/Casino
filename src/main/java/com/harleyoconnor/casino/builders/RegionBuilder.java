@@ -69,6 +69,74 @@ public abstract class RegionBuilder<T extends Region, V extends RegionBuilder<T,
     }
 
     /**
+     * Sets both maximum width and height of the {@link Region} to the given value.
+     *
+     * @param widthHeight The height and width to set as a minimum.
+     * @return This {@link Region} builder.
+     */
+    public V minWidthHeight (int widthHeight) {
+        this.maxWidth(widthHeight);
+        return this.maxHeight(widthHeight);
+    }
+
+    /**
+     * Sets both minimum width and height of the {@link Region} to the minimum width and height given.
+     *
+     * @param width The width to set as a minimum.
+     * @param height The height to set as a minimum.
+     * @return This {@link Region} builder.
+     */
+    public V minWidthHeight (int width, int height) {
+        this.maxWidth(width);
+        return this.maxHeight(height);
+    }
+
+    /**
+     * Sets the maximum width of the {@link Region} to the given width.
+     *
+     * @param width The width to set as a maximum.
+     * @return This {@link Region} builder.
+     */
+    public V maxWidth (int width) {
+        this.node.setMaxWidth(width);
+        return (V) this;
+    }
+
+    /**
+     * Sets the maximum height of the {@link Region} to the given height.
+     *
+     * @param height The height to set as a maximum.
+     * @return This {@link Region} builder.
+     */
+    public V maxHeight (int height) {
+        this.node.setMaxHeight(height);
+        return (V) this;
+    }
+
+    /**
+     * Sets both maximum width and height of the {@link Region} to the given value.
+     *
+     * @param widthHeight The height and width to set as a maximum.
+     * @return This {@link Region} builder.
+     */
+    public V maxWidthHeight (int widthHeight) {
+        this.maxWidth(widthHeight);
+        return this.maxHeight(widthHeight);
+    }
+
+    /**
+     * Sets both maximum width and height of the {@link Region} to the maximum width and height given.
+     *
+     * @param width The width to set as a maximum.
+     * @param height The height to set as a maximum.
+     * @return This {@link Region} builder.
+     */
+    public V maxWidthHeight (int width, int height) {
+        this.maxWidth(width);
+        return this.maxHeight(height);
+    }
+
+    /**
      * Fixes width of the {@link Region} by setting max and min width to width given.
      *
      * @param width The width to fix.

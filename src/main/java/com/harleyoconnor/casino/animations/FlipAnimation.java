@@ -107,6 +107,12 @@ public class FlipAnimation<T extends Node> implements Animation {
     }
 
     @Override
+    public Animation stop() {
+        this.animation.stop();
+        return this;
+    }
+
+    @Override
     public Animation setOnFinish(EventHandler<ActionEvent> eventHandler) {
         this.animation.setOnFinished(eventHandler);
         return this;

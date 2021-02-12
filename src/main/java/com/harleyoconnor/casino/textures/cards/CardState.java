@@ -31,11 +31,10 @@ public final class CardState {
 
     public CardState(Card card) {
         this.card = card;
-
     }
 
     public StackPane createAndConfigureView() {
-        StackPaneBuilder<StackPane> viewBuilder = StackPaneBuilder.create().minWidth(CARD_WIDTH);
+        StackPaneBuilder<StackPane> viewBuilder = StackPaneBuilder.create().fixWidth(CARD_WIDTH);
         final ImageView frontView = this.createFrontView();
         final ImageView backView = this.createBackView();
 

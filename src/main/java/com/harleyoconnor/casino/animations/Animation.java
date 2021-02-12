@@ -15,6 +15,12 @@ public interface Animation {
     Animation play ();
 
     /**
+     * Stops the animation.
+     * @return This {@link Animation} object.
+     */
+    Animation stop ();
+
+    /**
      * Sets an event handler for when the animation has finished.
      *
      * @param eventHandler The event handler to register when finished.

@@ -6,9 +6,13 @@
     -fx-background-image: url("../textures/background.png");
 }
 
-/*.white-text {*/
-/*    -fx-text-fill: white;*/
-/*}*/
+.white-background {
+    -fx-background-color: white;
+}
+
+.black-text {
+    -fx-text-fill: black;
+}
 
 .button {
     -fx-text-fill: black;

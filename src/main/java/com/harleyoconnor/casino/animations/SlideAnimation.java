@@ -51,9 +51,19 @@ public class SlideAnimation<T extends Node> implements Animation {
     }
 
     @Override
+    public Animation stop() {
+        this.animation.play();
+        return this;
+    }
+
+    @Override
     public Animation setOnFinish(EventHandler<ActionEvent> eventHandler) {
         this.animation.setOnFinished(eventHandler);
         return this;
+    }
+
+    public TranslateAxis getAxis() {
+        return axis;
     }
 
     /**
