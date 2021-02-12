@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -26,8 +27,8 @@ public final class SignInScreen extends MenuScreen {
     private TextField passwordField;
     private Label errorLabel;
 
-    public SignInScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen) {
-        super(casino, stage, scene, previousScreen);
+    public SignInScreen(Casino casino, Stage stage, Scene scene, StackPane parentView, MenuScreen previousScreen) {
+        super(casino, stage, scene, parentView, previousScreen);
     }
 
     @Override
@@ -84,7 +85,7 @@ public final class SignInScreen extends MenuScreen {
         }
 
         this.casino.setCurrentUser(user.get());
-        new GamesMenuScreen(this.casino, this.stage, this.scene, this).show();
+        this.toNewScreen(new GamesMenuScreen(this.casino, this.stage, this.scene, this.parentView, this));
     }
 
     /**
@@ -94,10 +95,10 @@ public final class SignInScreen extends MenuScreen {
      */
     private void onSignUpPress (ActionEvent event) {
         if (this.previousScreen instanceof SignUpScreen)
-            this.previousScreen.show();
+            this.toNewScreen(this.previousScreen);
         else {
             // Create the sign up screen if it wasn't the previous screen.
-            new SignUpScreen(this.casino, this.stage, this.scene, this).show();
+            this.toNewScreen(new SignUpScreen(this.casino, this.stage, this.scene, this.parentView, this));
         }
     }
 

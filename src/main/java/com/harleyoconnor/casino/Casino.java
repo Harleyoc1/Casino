@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino;
 
+import com.harleyoconnor.casino.builders.StackPaneBuilder;
 import com.harleyoconnor.casino.menus.GamesMenuScreen;
 import com.harleyoconnor.casino.menus.SignInScreen;
 import com.harleyoconnor.casino.textures.cards.Cards;
@@ -24,6 +25,7 @@ public final class Casino extends Application {
 
     private Stage primaryStage;
     private Scene primaryScene;
+    private StackPane primaryView;
 
     @Override
     public void start(Stage primaryStage) {
@@ -33,7 +35,8 @@ public final class Casino extends Application {
         Cards.loadAndRegisterCards();
 
         this.primaryStage = primaryStage;
-        this.primaryScene = new Scene(new StackPane());
+        this.primaryView = StackPaneBuilder.create().build();
+        this.primaryScene = new Scene(this.primaryView);
 
         // Add default stylesheet to the scene.
         this.primaryScene.getStylesheets().add(AppConstants.FILE_PREFIX + FileUtils.getFile(AppConstants.DEFAULT_STYLESHEET_PATH).getPath());
@@ -41,9 +44,9 @@ public final class Casino extends Application {
         this.setupBasicProperties();
 
         // Creates and shows the sign in screen.
-//        new SignInScreen(this, this.primaryStage, this.primaryScene, null).show();
-        this.setCurrentUser(Users.find("Harleyoc1").get());
-        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, null).show();
+        new SignInScreen(this, this.primaryStage, this.primaryScene, this.primaryView, null).show();
+//        this.setCurrentUser(Users.find("Harleyoc1").get());
+//        new GamesMenuScreen(this, this.primaryStage, this.primaryScene, this.primaryView, null).show();
 
         primaryStage.setScene(this.primaryScene);
         primaryStage.show();

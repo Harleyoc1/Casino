@@ -3,6 +3,7 @@ package com.harleyoconnor.casino.games;
 import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.menus.MenuScreen;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -17,16 +18,10 @@ public abstract class Game extends MenuScreen {
     /** The game holder for the current game. */
     protected final GameHolder<?> gameHolder;
 
-    public Game(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player, GameHolder<?> gameHolder) {
-        super(casino, stage, scene, previousScreen, false);
+    public Game(Casino casino, Stage stage, Scene scene, StackPane parentView, MenuScreen previousScreen, Player player, GameHolder<?> gameHolder) {
+        super(casino, stage, scene, parentView, previousScreen, false);
         this.player = player;
         this.gameHolder = gameHolder;
-    }
-
-    @Override
-    public void show() {
-        this.layout = this.setupScreen();
-        super.show();
     }
 
     @Override

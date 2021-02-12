@@ -55,15 +55,9 @@ public final class GamesMenuScreen extends MenuScreen {
 
     private GameHolder<?> selectedGame = null;
 
-    public GamesMenuScreen(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen) {
-        super(casino, stage, scene, previousScreen, false);
+    public GamesMenuScreen(Casino casino, Stage stage, Scene scene, StackPane parentView, MenuScreen previousScreen) {
+        super(casino, stage, scene, parentView, previousScreen, false);
         this.user = casino.getCurrentUser();
-    }
-
-    @Override
-    public void show() {
-        this.layout = this.setupScreen();
-        super.show();
     }
 
     @Override
@@ -165,7 +159,7 @@ public final class GamesMenuScreen extends MenuScreen {
             return;
         }
 
-        this.selectedGame.construct(this.casino, this.stage, this.scene, this, new Player(this.user, betAmount)).show();
+        this.toNewScreen(this.selectedGame.construct(this.casino, this.stage, this.scene, this.parentView, this, new Player(this.user, betAmount)));
     }
 
     private void error (String description) {

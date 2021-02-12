@@ -3,7 +3,6 @@ package com.harleyoconnor.casino.animations;
 import com.harleyoconnor.casino.builders.TimelineBuilder;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -64,27 +63,6 @@ public class SlideAnimation<T extends Node> implements Animation {
 
     public TranslateAxis getAxis() {
         return axis;
-    }
-
-    /**
-     * Holds the axis for which the slide (translation) will happen.
-     */
-    public enum TranslateAxis {
-        X, Y, Z;
-
-        /**
-         * Gets the {@link DoubleProperty} for the translation for the current Axis object.
-         *
-         * @param node The {@link Node} object.
-         * @return The {@link DoubleProperty} for the translation for the current Axis object.
-         */
-        private DoubleProperty getTranslateProperty (Node node) {
-            return switch (this) {
-                case X -> node.translateXProperty();
-                case Y -> node.translateYProperty();
-                case Z -> node.translateZProperty();
-            };
-        }
     }
 
 }

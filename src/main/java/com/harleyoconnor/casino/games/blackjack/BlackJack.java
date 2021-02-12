@@ -3,6 +3,7 @@ package com.harleyoconnor.casino.games.blackjack;
 import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.animations.Animation;
 import com.harleyoconnor.casino.animations.SlideAnimation;
+import com.harleyoconnor.casino.animations.TranslateAxis;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.Games;
@@ -71,8 +72,8 @@ public final class BlackJack extends Game {
     private final BooleanProperty doubleDownDisabled = new SimpleBooleanProperty(false);
     private final BooleanProperty surrenderDisabled = new SimpleBooleanProperty(false);
 
-    public BlackJack(Casino casino, Stage stage, Scene scene, MenuScreen previousScreen, Player player) {
-        super(casino, stage, scene, previousScreen, player, Games.BLACKJACK);
+    public BlackJack(Casino casino, Stage stage, Scene scene, StackPane parentView, MenuScreen previousScreen, Player player) {
+        super(casino, stage, scene, parentView, previousScreen, player, Games.BLACKJACK);
     }
 
     @Override
@@ -196,7 +197,7 @@ public final class BlackJack extends Game {
             StackPaneBuilder.edit(cardView).translateX(CardState.CARD_WIDTH - 50);
 
             // Create and add the animation to the animation list.
-            this.animations.add(new SlideAnimation<>(cardView, SlideAnimation.TranslateAxis.X, 0, 750, Interpolator.EASE_BOTH)
+            this.animations.add(new SlideAnimation<>(cardView, TranslateAxis.X, 0, 750, Interpolator.EASE_BOTH)
                     .setOnFinish(this::onAnimationFinished));
         });
 
@@ -266,7 +267,7 @@ public final class BlackJack extends Game {
     private StackPane createCardView(CardState cardState, boolean dealerCard) {
         StackPane cardView = StackPaneBuilder.edit(cardState.createAndConfigureView()).translateY(-this.scene.getHeight()).build();
         // Set up card animation, so that it slides in from the top.
-        this.animations.add(new SlideAnimation<>(cardView, SlideAnimation.TranslateAxis.Y, 0, 1500, Interpolator.EASE_BOTH)
+        this.animations.add(new SlideAnimation<>(cardView, TranslateAxis.Y, 0, 1500, Interpolator.EASE_BOTH)
                 .setOnFinish(event -> this.onCardAnimationFinished(event, cardState, dealerCard)));
         return cardView;
     }
@@ -291,6 +292,14 @@ public final class BlackJack extends Game {
         }
     }
 
+    /**
+     * Executes when a card flip animation has finished, adding it to the visible player card list
+     * and updating the value label if it's a player card, and plays the next animation.
+     *
+     * @param event The {@link ActionEvent}.
+     * @param cardState The {@link CardState} for the card.
+     * @param playerCard True if the card is a player's.
+     */
     private void onCardFlipFinished (ActionEvent event, CardState cardState, boolean playerCard) {
         if (playerCard) {
             this.visiblePlayerCards.add(cardState);
@@ -351,8 +360,8 @@ public final class BlackJack extends Game {
     }
 
     @Override
-    public void show() {
-        super.show();
+    public void onSlideInFinished(ActionEvent event) {
+        super.onSlideInFinished(event);
 
         this.endGameIfWonOrLost(this.countCardsValues(this.dealerCards), true); // The dealer draws their cards first.
         this.endGameIfWonOrLost(this.countCardsValues(this.playerCards), false); // Check if the player won.
@@ -410,7 +419,7 @@ public final class BlackJack extends Game {
         }
 
         // Create result box.
-        final VBoxBuilder<VBox> resultBoxBuilder = VBoxBuilder.create().add(InterfaceUtils.centreHorizontally(LabelBuilder.create().text(endType.getTitle()).styleClasses("black-text").title().build()))
+        final VBoxBuilder<VBox> resultBoxBuilder = VBoxBuilder.create().add(InterfaceUtils.centreHorizontally(LabelBuilder.create().text(endType.getTitle()).styleClasses("black-text").title().wrapText().build()))
                 .add(InterfaceUtils.centreHorizontally(LabelBuilder.create().text(endType.getSubtitle()).styleClasses("black-text").body().wrapText().build()));
 
         // This will store the second line of text, which will inform the user of the outcome of their bet.
@@ -427,12 +436,12 @@ public final class BlackJack extends Game {
 
         // Finish building the result box. Translate it a screen up so it's out of view initially.
         resultBoxBuilder.add(middleTextDisplay).add(HBoxBuilder.create().add(ButtonBuilder.create().text("Rematch").onAction(this::onRematchPress).body().styleClasses("black-border").build(), ButtonBuilder.create().text("Quit").onAction(this::onQuitPress).body().styleClasses("black-border").build())
-                .centre().spacing().build()).translateY(-this.scene.getHeight()).styleClasses("game-end-stats").centre().padding().maxWidthHeight(240);
+                .centre().spacing().build()).translateY(-this.scene.getHeight()).styleClasses("game-end-stats").centre().padding().maxWidthHeight(260);
 
         this.layout.getChildren().add(resultBoxBuilder.build()); // Add result box to the view.
 
         // Create the animation so the result box slides in from the top.
-        this.animations.add(new SlideAnimation<>(resultBoxBuilder.build(), SlideAnimation.TranslateAxis.Y, 0, 1000, Interpolator.EASE_BOTH).setOnFinish(this::onAnimationFinished));
+        this.animations.add(new SlideAnimation<>(resultBoxBuilder.build(), TranslateAxis.Y, 0, 1000, Interpolator.EASE_BOTH).setOnFinish(this::onAnimationFinished));
 
         if (!this.isAnimationPlaying())
             this.playNextAnimation(); // Play next animation if not already playing.
@@ -440,12 +449,12 @@ public final class BlackJack extends Game {
 
     private void onRematchPress (ActionEvent event) {
         // Create a new BlackJack game with the same original bet.
-        new BlackJack(this.casino, this.stage, this.scene, this, this.player.resetBet()).show();
+        this.toNewScreen(new BlackJack(this.casino, this.stage, this.scene, this.parentView, this, this.player.resetBet()));
     }
 
     private void onQuitPress (ActionEvent event) {
         // Show the game menu screen.
-        new GamesMenuScreen(this.casino, this.stage, this.scene, this).show();
+        this.toNewScreen(new GamesMenuScreen(this.casino, this.stage, this.scene, this.parentView, this), TranslateAxis.X, true);
     }
 
     /**

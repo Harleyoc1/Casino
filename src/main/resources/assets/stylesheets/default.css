@@ -2,7 +2,7 @@
     -fx-text-fill: white;
 }
 
-.root {
+.menu-screen {
     -fx-background-image: url("../textures/background.png");
 }
 
