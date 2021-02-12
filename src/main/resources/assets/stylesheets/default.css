@@ -6,12 +6,22 @@
     -fx-background-image: url("../textures/background.png");
 }
 
+.game-end-stats {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 8px;
+}
+
 .white-background {
     -fx-background-color: white;
 }
 
 .black-text {
     -fx-text-fill: black;
+}
+
+.black-border {
+    -fx-border-color: black !important;
+    -fx-border-width: 3px;
 }
 
 .button {
@@ -39,10 +49,10 @@
 }
 
 .game-button, .game-button:hover {
-    -fx-border-color: green !important;
+    -fx-border-color: white !important;
     -fx-border-radius: 8px;
     -fx-border-width: 5px;
-    -fx-text-fill: green;
+    -fx-text-fill: white;
     -fx-font-size: 16;
 }
 

@@ -14,10 +14,12 @@ public final class Player extends User {
 
     /** The amount the user has bet on the game. */
     private int amountBet;
+    private final int originalAmountBet;
 
     public Player(User user, int amountBet) {
         super(user.getUsername(), user.getPasswordHandler());
         this.amountBet = amountBet;
+        this.originalAmountBet = amountBet;
     }
 
     /**
@@ -33,6 +35,20 @@ public final class Player extends User {
 
     public void setAmountBet(int amountBet) {
         this.amountBet = amountBet;
+    }
+
+    public int getOriginalAmountBet() {
+        return originalAmountBet;
+    }
+
+    /**
+     * Resets the amount bet to the original bet amount for this {@link Player} object.
+     *
+     * @return This {@link Player} object.
+     */
+    public Player resetBet () {
+        this.amountBet = this.originalAmountBet;
+        return this;
     }
 
     /**
