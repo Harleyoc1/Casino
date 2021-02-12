@@ -449,12 +449,12 @@ public final class BlackJack extends Game {
 
     private void onRematchPress (ActionEvent event) {
         // Create a new BlackJack game with the same original bet.
-        this.toNewScreen(new BlackJack(this.casino, this.stage, this.scene, this.parentView, this, this.player.resetBet()));
+        this.toNewScreen(new BlackJack(this.casino, this.stage, this.scene, this.parentView, this, this.player.resetBet()), TranslateAxis.X, true);
     }
 
     private void onQuitPress (ActionEvent event) {
         // Show the game menu screen.
-        this.toNewScreen(new GamesMenuScreen(this.casino, this.stage, this.scene, this.parentView, this), TranslateAxis.X, true);
+        this.toNewScreen(new GamesMenuScreen(this.casino, this.stage, this.scene, this.parentView, this));
     }
 
     /**
@@ -514,7 +514,7 @@ public final class BlackJack extends Game {
          * @return True if this {@link EndType} results in the player winning the bet.
          */
         public boolean doesPlayerWinBet () {
-            return this == PLAYER_WON || this == DEALER_BUST;
+            return this == PLAYER_WON || this == DEALER_BUST || this == PLAYER_CLOSER;
         }
 
         public String getTitle() {

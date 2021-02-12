@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
+import java.awt.event.KeyEvent;
+
 /**
  * A helper class that helps easily construct {@link Button} objects.
  *

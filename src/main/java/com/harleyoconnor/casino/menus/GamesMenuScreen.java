@@ -2,6 +2,7 @@ package com.harleyoconnor.casino.menus;
 
 import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
+import com.harleyoconnor.casino.animations.TranslateAxis;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.games.Game;
 import com.harleyoconnor.casino.games.GameHolder;
@@ -12,6 +13,7 @@ import com.harleyoconnor.casino.utils.InterfaceUtils;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,7 +40,7 @@ public final class GamesMenuScreen extends MenuScreen {
 
     private Map<GameHolder<?>, Button> gameButtons;
 
-    private final TextFieldBuilder<TextField> betAmountField = TextFieldBuilder.createTextField().placeholder("BTC").body().fixWidth(60);
+    private final TextFieldBuilder<TextField> betAmountField = TextFieldBuilder.createTextField().placeholder("BTC").body().fixWidth(60).onEnter(this::onStartGamePressed);
     private final LabelBuilder<Label> errorLabel = LabelBuilder.create().wrapText().body();
     private final ButtonBuilder<Button> startGameButton = ButtonBuilder.create().text("Start").body().fixWidth(60).onAction(this::onStartGamePressed);
 
@@ -130,9 +132,9 @@ public final class GamesMenuScreen extends MenuScreen {
      * and meets the minimum bet value, and they can afford it. It then creates the {@link Player} object
      * from this and starts the selected {@link Game}.
      *
-     * @param event The {@link ActionEvent}.
+     * @param event The {@link Event}.
      */
-    private void onStartGamePressed(ActionEvent event) {
+    private void onStartGamePressed(Event event) {
         if (this.selectedGame == null)
             return;
 
@@ -159,7 +161,7 @@ public final class GamesMenuScreen extends MenuScreen {
             return;
         }
 
-        this.toNewScreen(this.selectedGame.construct(this.casino, this.stage, this.scene, this.parentView, this, new Player(this.user, betAmount)));
+        this.toNewScreen(this.selectedGame.construct(this.casino, this.stage, this.scene, this.parentView, this, new Player(this.user, betAmount)), TranslateAxis.X, true);
     }
 
     private void error (String description) {

@@ -7,6 +7,7 @@ import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
 import com.harleyoconnor.casino.utils.InterfaceUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,8 +38,8 @@ public final class SignInScreen extends MenuScreen {
         final Label titleLabel = LabelBuilder.create().text("Sign In").title().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create fields for username, password, and password confirmation.
-        this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
-        this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").build();
+        this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").onEnter(this::onSignInPress).build();
+        this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").onEnter(this::onSignInPress).build();
 
         // Create error label, for when the user enters details wrong - such as entering an existing username.
         this.errorLabel = LabelBuilder.create().body().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
@@ -64,9 +65,9 @@ public final class SignInScreen extends MenuScreen {
      * <tt>errorLabel</tt> is updated and we return, otherwise we find and log in the user, and open the
      * game menu.
      *
-     * @param event The {@link ActionEvent}.
+     * @param event The {@link Event}.
      */
-    private void onSignInPress (ActionEvent event) {
+    private void onSignInPress (Event event) {
         String username = this.usernameField.getText();
         String password = this.passwordField.getText();
 
@@ -91,9 +92,9 @@ public final class SignInScreen extends MenuScreen {
     /**
      * Executes when the sign up button is pressed. Sends the user back to the sign up screen.
      *
-     * @param event The {@link ActionEvent}.
+     * @param event The {@link Event}.
      */
-    private void onSignUpPress (ActionEvent event) {
+    private void onSignUpPress (Event event) {
         if (this.previousScreen instanceof SignUpScreen)
             this.toNewScreen(this.previousScreen);
         else {

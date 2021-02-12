@@ -1,7 +1,6 @@
 package com.harleyoconnor.casino.menus;
 
 import com.harleyoconnor.casino.Casino;
-import com.harleyoconnor.casino.animations.Animation;
 import com.harleyoconnor.casino.animations.SlideAnimation;
 import com.harleyoconnor.casino.animations.TranslateAxis;
 import javafx.animation.Interpolator;

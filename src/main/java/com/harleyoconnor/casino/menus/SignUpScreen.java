@@ -8,6 +8,7 @@ import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
 import com.harleyoconnor.casino.utils.InterfaceUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,9 +38,9 @@ public final class SignUpScreen extends MenuScreen {
         final Label titleLabel = LabelBuilder.create().text("Sign Up").title().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create fields for username, password, and password confirmation.
-        this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").build();
-        this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").build();
-        this.confirmPasswordField = TextFieldBuilder.createPasswordField().placeholder("Confirm Password").build();
+        this.usernameField = TextFieldBuilder.createTextField().placeholder("Username").onEnter(this::onSignUpPress).build();
+        this.passwordField = TextFieldBuilder.createPasswordField().placeholder("Password").onEnter(this::onSignUpPress).build();
+        this.confirmPasswordField = TextFieldBuilder.createPasswordField().placeholder("Confirm Password").onEnter(this::onSignUpPress).build();
 
         // Create error label, for when the user enters details wrong - such as entering an existing username.
         this.errorLabel = LabelBuilder.create().body().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
@@ -65,9 +66,9 @@ public final class SignUpScreen extends MenuScreen {
      * If any of those conditions weren't met, the <tt>errorLabel</tt> is updated and we return, otherwise we
      * create and register the new user and open the game menu.
      *
-     * @param event The {@link ActionEvent}.
+     * @param event The {@link Event}.
      */
-    private void onSignUpPress(ActionEvent event) {
+    private void onSignUpPress(Event event) {
         String username = this.usernameField.getText();
 
         // Make sure they have actually entered a username.
@@ -109,9 +110,9 @@ public final class SignUpScreen extends MenuScreen {
     /**
      * Executes when the sign in button is pressed. Sends the user back to the sign in screen.
      *
-     * @param event The {@link ActionEvent}.
+     * @param event The {@link Event}.
      */
-    private void onSignInPress (ActionEvent event) {
+    private void onSignInPress (Event event) {
         if (this.previousScreen instanceof SignInScreen)
             this.toNewScreen(this.previousScreen);
         else {
