@@ -31,6 +31,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author Harley O'Connor
@@ -46,9 +47,6 @@ public final class BlackJack extends Game {
     private final List<CardState> dealerCards = new ArrayList<>();
     /** The player's cards. */
     private final List<CardState> playerCards = new ArrayList<>();
-
-    /** The player's cards which are currently shown. */
-    private final List<CardState> visiblePlayerCards = new ArrayList<>();
 
     // Card display builders.
     private final HBoxBuilder<HBox> dealerCardsDisplay = HBoxBuilder.create();
@@ -69,7 +67,9 @@ public final class BlackJack extends Game {
     /** Holds the current turn. */
     private int turnCount = 0;
 
+    /** This is bind to the double down button's disabled property, so it can be used to disable the button. */
     private final BooleanProperty doubleDownDisabled = new SimpleBooleanProperty(false);
+    /** This is bind to the surrender button's disabled property, so it can be used to disable the button. */
     private final BooleanProperty surrenderDisabled = new SimpleBooleanProperty(false);
 
     public BlackJack(Casino casino, Stage stage, Scene scene, StackPane parentView, MenuScreen previousScreen, Player player) {
@@ -81,25 +81,30 @@ public final class BlackJack extends Game {
         // Selects 2 random cards for the dealer.
         this.dealerCards.addAll(this.deck.select(2));
 
-        // Create the card views and adds to the dealers card display.
+        // Create the card views and adds each to the dealer's card display.
         this.dealerCards.forEach(cardState -> this.dealerCardsDisplay.add(this.createCardView(cardState, true)));
 
+        // Selects 2 random cards for the player.
         this.playerCards.addAll(this.deck.select(2));
 
+        // Create the card views and add each to the player's card display.
         this.playerCards.forEach(cardState -> this.playerCardsDisplay.add(this.createCardView(cardState, false)));
 
         // Components for user's view.
         this.updateValueLabel().body();
         this.betLabel.text(this.getBetLabelText()).body();
 
+        // Create action buttons.
         Button hitButton = ButtonBuilder.create().text("Hit").onAction(this::onHitPress).fixWidth(BUTTON_WIDTH).body().build();
         Button standButton = ButtonBuilder.create().text("Stand").onAction(this::onStandPress).fixWidth(BUTTON_WIDTH).body().build();
         Button doubleDownButton = ButtonBuilder.create().text("Double Down").onAction(this::onDoubleDownPress).fixWidth(BUTTON_WIDTH).body().build();
         Button surrenderButton = ButtonBuilder.create().text("Surrender").onAction(this::onSurrenderPress).fixWidth(BUTTON_WIDTH).build();
 
+        // Bind disable properties.
         doubleDownButton.disableProperty().bind(this.doubleDownDisabled);
         surrenderButton.disableProperty().bind(this.surrenderDisabled);
 
+        // Create main view.
         VBox mainContentVBox = VBoxBuilder.create().add(this.dealerCardsDisplay.spacing(10).padding().centre().build(), InterfaceUtils.createVerticalSpacer(),
                 InterfaceUtils.createVerticalSpacer(), this.playerCardsDisplay.spacing(10).padding().centre().build(),
                 InterfaceUtils.centreHorizontally(0, 0, this.valueLabel.build()), InterfaceUtils.centreHorizontally(0, 0, this.betLabel.build()),
@@ -123,6 +128,8 @@ public final class BlackJack extends Game {
 
         this.doubleDownDisabled.setValue(true);
         this.nextTurn();
+
+        this.playNextAnimation();
     }
 
     /**
@@ -135,10 +142,8 @@ public final class BlackJack extends Game {
         if (this.isAnimationPlaying())
             return;
 
-        this.nextTurn();
-
-        // If an animation is not playing, nothing happened.
-        if (!this.isAnimationPlaying()) {
+        // Call next turn, and if it returns true (the game did not end and nothing else happened) end the game .
+        if (this.nextTurn()) {
             int dealerCardValue = this.countCardsValues(this.dealerCards);
             int playerCardValue = this.countCardsValues(this.playerCards);
 
@@ -150,6 +155,8 @@ public final class BlackJack extends Game {
                 this.endGame(EndType.PLAYER_CLOSER);
             }
         }
+
+        this.playNextAnimation();
     }
 
     /**
@@ -178,6 +185,7 @@ public final class BlackJack extends Game {
 
         this.player.setAmountBet(this.player.getAmountBet() / 2); // Half the player's bet.
         this.endGame(EndType.PLAYER_SURRENDER); // End the game.
+        this.playNextAnimation();
     }
 
     /**
@@ -206,28 +214,29 @@ public final class BlackJack extends Game {
 
         // Insert it into the card display.
         cardsView.insert(this.createCardView(Objects.requireNonNull(cardState), dealer), cardsView.build().getChildren().size() - 1);
-
-        if (this.animations.size() <= cardStates.size())
-            this.playNextAnimation(); // Play the animation.
     }
 
     /**
      * Executes the next turn.
+     *
+     * @return True if nothing happened on this turn (so game should be ended).
      */
-    private void nextTurn() {
-        int dealerCardValue = this.countCardsValues(this.dealerCards);
+    private boolean nextTurn() {
+        boolean nothingHappened = true;
 
-        if (dealerCardValue < 17) {
-            // If dealer's card value is less than 17, they hit.
-            this.drawNewCard(this.dealerCards, this.dealerCardsDisplay, true);
+        boolean gameEnded = this.endGameIfWonOrLost(this.countCardsValues(this.playerCards), false);
+
+        if (!gameEnded) {
+            if (this.countCardsValues(this.dealerCards) < 17) {
+                // If dealer's card value is less than 17, they hit.
+                this.drawNewCard(this.dealerCards, this.dealerCardsDisplay, true);
+                nothingHappened = false;
+            }
+            // If dealer's card value is 17 or more, they stand (do nothing).
+
+            // End the game if the dealer has won or bust, and then if the game wasn't ended end the game if the player won or bust.
+            gameEnded = this.endGameIfWonOrLost(this.countCardsValues(this.dealerCards), true);
         }
-        // If dealer's card value is 17 or more, they stand (do nothing).
-
-        dealerCardValue = this.countCardsValues(this.dealerCards);
-
-        // End the game if the dealer has won or bust, and then if the game wasn't ended end the game if the player won or bust.
-        if (!this.endGameIfWonOrLost(dealerCardValue, true))
-            this.endGameIfWonOrLost(this.countCardsValues(this.playerCards), false);
 
         this.turnCount++; // Increment turn count by one.
 
@@ -235,6 +244,8 @@ public final class BlackJack extends Game {
             // After the first turn, disable surrender option.
             this.surrenderDisabled.setValue(true);
         }
+
+        return nothingHappened && !gameEnded; // Return true (as nothing happened) if nothing happened and the game didn't end.
     }
 
     /**
@@ -287,25 +298,18 @@ public final class BlackJack extends Game {
             this.onAnimationFinished(event);
         } else {
             // Flip the card and play the flipping animation.
-            if (!this.showCard(cardState, !dealerCard, false))
-                this.onCardFlipFinished(event, cardState, !dealerCard);
+            if (!this.showCard(cardState, true))
+                this.onCardFlipFinished(event);
         }
     }
 
     /**
-     * Executes when a card flip animation has finished, adding it to the visible player card list
-     * and updating the value label if it's a player card, and plays the next animation.
+     * Executes when a card flip animation has finished, updating the value label and playing the next animation.
      *
      * @param event The {@link ActionEvent}.
-     * @param cardState The {@link CardState} for the card.
-     * @param playerCard True if the card is a player's.
      */
-    private void onCardFlipFinished (ActionEvent event, CardState cardState, boolean playerCard) {
-        if (playerCard) {
-            this.visiblePlayerCards.add(cardState);
-            this.updateValueLabel();
-        }
-
+    private void onCardFlipFinished (ActionEvent event) {
+        this.updateValueLabel();
         this.onAnimationFinished(event);
     }
 
@@ -322,7 +326,7 @@ public final class BlackJack extends Game {
      * Updates text in value label to display the player's current hand value.
      */
     private LabelBuilder<Label> updateValueLabel() {
-        return this.valueLabel.text("Your Value: " + this.countCardsValues(this.visiblePlayerCards));
+        return this.valueLabel.text("Your Value: " + this.countCardsValues(this.playerCards.stream().filter(cardState -> !cardState.isFlipped()).collect(Collectors.toList())));
     }
 
     /**
@@ -363,8 +367,11 @@ public final class BlackJack extends Game {
     public void onSlideInFinished(ActionEvent event) {
         super.onSlideInFinished(event);
 
-        this.endGameIfWonOrLost(this.countCardsValues(this.dealerCards), true); // The dealer draws their cards first.
-        this.endGameIfWonOrLost(this.countCardsValues(this.playerCards), false); // Check if the player won.
+        // The dealer draws their cards first, so check they win first.
+        if (!this.endGameIfWonOrLost(this.countCardsValues(this.dealerCards), true))
+            // Check if the player won if the dealer didn't.
+            this.endGameIfWonOrLost(this.countCardsValues(this.playerCards), false);
+
         this.playNextAnimation(); // Start playing animations when the scene is shown.
     }
 
@@ -418,6 +425,16 @@ public final class BlackJack extends Game {
             this.player.betLost();
         }
 
+        this.createResultBox(endType);
+    }
+
+    /**
+     * Creates a result box to show the player how the game ended and give them buttons to decide
+     * what to do next.
+     *
+     * @param endType The {@link EndType} with which the game ended.
+     */
+    private void createResultBox(EndType endType) {
         // Create result box.
         final VBoxBuilder<VBox> resultBoxBuilder = VBoxBuilder.create().add(InterfaceUtils.centreHorizontally(LabelBuilder.create().text(endType.getTitle()).styleClasses("black-text").title().wrapText().build()))
                 .add(InterfaceUtils.centreHorizontally(LabelBuilder.create().text(endType.getSubtitle()).styleClasses("black-text").body().wrapText().build()));
@@ -442,9 +459,6 @@ public final class BlackJack extends Game {
 
         // Create the animation so the result box slides in from the top.
         this.animations.add(new SlideAnimation<>(resultBoxBuilder.build(), TranslateAxis.Y, 0, 1000, Interpolator.EASE_BOTH).setOnFinish(this::onAnimationFinished));
-
-        if (!this.isAnimationPlaying())
-            this.playNextAnimation(); // Play next animation if not already playing.
     }
 
     private void onRematchPress (ActionEvent event) {
@@ -457,31 +471,27 @@ public final class BlackJack extends Game {
         this.toNewScreen(new GamesMenuScreen(this.casino, this.stage, this.scene, this.parentView, this));
     }
 
-    /**
-     * If the card isn't already flipped, this flips it, and assumes the given card is a player card.
-     *
-     * @param cardState The {@link CardState} object.
-     */
     private void showCard (CardState cardState) {
-        this.showCard(cardState, false, true);
+        this.showCard(cardState, false);
     }
 
     /**
      * If the card isn't already flipped, this flips it.
      *
      * @param cardState The {@link CardState} object.
-     * @param playerCard True if the card being shown is a player card.
      * @return True if the card was flipped.
      */
-    private boolean showCard(CardState cardState, boolean playerCard, boolean gameEnding) {
+    private boolean showCard(CardState cardState, boolean flipNow) {
         // If the card is not shown (flipped) and it's not currently translated (still sliding in), then flip it.
         if (cardState.isFlipped() && cardState.getViewsHolder() != null && cardState.getViewsHolder().getTranslateY() == 0) {
-            // If an animation isn't currently playing, make sure to call the next animation after this one.
-            if (this.isAnimationPlaying())
-                cardState.getFlipAnimation().setOnFinish(event -> this.onCardFlipFinished(event, cardState, playerCard));
-            else if (gameEnding && !this.isAnimationPlaying()) cardState.getFlipAnimation().setOnFinish(this::onAnimationFinished);
+            // Make sure the next animation is called after the flip has finished.
+            cardState.getFlipAnimation().setOnFinish(this::onCardFlipFinished);
 
-            cardState.flip(); // Flip the card.
+            if (!flipNow) {
+                this.animations.add(cardState.getFlipAnimation());
+                cardState.setFlipped(true);
+            } else cardState.flip();
+
             return true;
         }
         return false;

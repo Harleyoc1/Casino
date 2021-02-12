@@ -73,6 +73,10 @@ public final class CardState {
         return flipped;
     }
 
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
+    }
+
     public FlipAnimation<ImageView> getFlipAnimation() {
         return flipAnimation;
     }
