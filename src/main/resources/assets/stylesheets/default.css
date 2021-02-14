@@ -21,14 +21,19 @@
 
 .black-border {
     -fx-border-color: black !important;
-    -fx-border-width: 3px;
+    -fx-text-fill: black;
+    -fx-border-width: 2px;
+    -fx-background-color: white;
 }
 
 .button {
+    -fx-cursor: hand;
+}
+
+.white-button {
     -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: white !important;
-    -fx-cursor: hand;
 }
 
 .text-field {
@@ -57,8 +62,8 @@
 }
 
 .game-button-selected, .game-button-selected:hover {
-    -fx-border-color: lightgreen !important;
-    -fx-text-fill: lightgreen;
+    -fx-border-color: lightgray !important;
+    -fx-text-fill: lightgray;
 }
 
 .invisible-button {

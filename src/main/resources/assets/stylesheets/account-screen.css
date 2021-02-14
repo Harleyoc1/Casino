@@ -1,0 +1,20 @@
+.root {
+    -fx-background-color: white;
+}
+
+.text-field {
+    -fx-text-fill: black;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+.button {
+    -fx-border-color: black !important;
+    -fx-text-fill: black;
+    -fx-border-width: 1px;
+    -fx-background-color: white;
+}
+
+.label {
+    -fx-text-fill: black;
+}

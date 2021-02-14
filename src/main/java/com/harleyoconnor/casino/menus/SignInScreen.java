@@ -2,6 +2,7 @@ package com.harleyoconnor.casino.menus;
 
 import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
+import com.harleyoconnor.casino.animations.TranslateAxis;
 import com.harleyoconnor.casino.builders.*;
 import com.harleyoconnor.casino.users.User;
 import com.harleyoconnor.casino.users.Users;
@@ -45,10 +46,10 @@ public final class SignInScreen extends MenuScreen {
         this.errorLabel = LabelBuilder.create().body().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create sign up button - this will redirect the user to the sign up screen.
-        final Button signUpButton = ButtonBuilder.create().text("Sign Up").onAction(this::onSignUpPress).build();
+        final Button signUpButton = ButtonBuilder.create().text("Sign Up").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onSignUpPress).build();
 
         // Create sign in button - this will attempt to sign the user in based on the details given.
-        final Button signInButton = ButtonBuilder.create().text("Sign In").onAction(this::onSignInPress).build();
+        final Button signInButton = ButtonBuilder.create().text("Sign In").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onSignInPress).build();
 
         // Create vertical box and add the content to it.
         VBox vBox = VBoxBuilder.create().add(titleLabel, this.usernameField, this.passwordField,
@@ -99,7 +100,7 @@ public final class SignInScreen extends MenuScreen {
             this.toNewScreen(this.previousScreen);
         else {
             // Create the sign up screen if it wasn't the previous screen.
-            this.toNewScreen(new SignUpScreen(this.casino, this.stage, this.scene, this.parentView, this));
+            this.toNewScreen(new SignUpScreen(this.casino, this.stage, this.scene, this.parentView, this), TranslateAxis.X, true);
         }
     }
 

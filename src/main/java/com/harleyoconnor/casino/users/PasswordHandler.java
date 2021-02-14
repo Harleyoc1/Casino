@@ -109,4 +109,9 @@ public final class PasswordHandler {
         return password;
     }
 
+    public PasswordHandler setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
 }

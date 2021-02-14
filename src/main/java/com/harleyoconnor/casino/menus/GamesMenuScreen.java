@@ -14,6 +14,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,11 +39,13 @@ public final class GamesMenuScreen extends MenuScreen {
 
     private final User user;
 
-    private Map<GameHolder<?>, Button> gameButtons;
+    private final ButtonBuilder<Button> accountButton = ButtonBuilder.create().text("Account").body().styleClasses(AppConstants.WHITE_BUTTON).fixWidth(80).onAction(this::onAccountPressed);
+
+    private final Map<GameHolder<?>, Button> gameButtons = new HashMap<>();
 
     private final TextFieldBuilder<TextField> betAmountField = TextFieldBuilder.createTextField().placeholder("BTC").body().fixWidth(60).onEnter(this::onStartGamePressed);
     private final LabelBuilder<Label> errorLabel = LabelBuilder.create().wrapText().body();
-    private final ButtonBuilder<Button> startGameButton = ButtonBuilder.create().text("Start").body().fixWidth(60).onAction(this::onStartGamePressed);
+    private final ButtonBuilder<Button> startGameButton = ButtonBuilder.create().text("Start").body().styleClasses(AppConstants.WHITE_BUTTON).fixWidth(60).onAction(this::onStartGamePressed);
 
     private final HBoxBuilder<HBox> errorLabelContainer = HBoxBuilder.create().add(this.errorLabel.build()).centre().padding(6);
 
@@ -56,6 +59,8 @@ public final class GamesMenuScreen extends MenuScreen {
     private final VBoxBuilder<VBox> foregroundView = VBoxBuilder.create();
 
     private GameHolder<?> selectedGame = null;
+
+    private AccountStageHandler accountStage = null;
 
     public GamesMenuScreen(Casino casino, Stage stage, Scene scene, StackPane parentView, MenuScreen previousScreen) {
         super(casino, stage, scene, parentView, previousScreen, false);
@@ -75,19 +80,25 @@ public final class GamesMenuScreen extends MenuScreen {
         Label balanceLabel = LabelBuilder.create().text("Balance: " + this.user.getBitcoins() + " BTC").body().build();
         VBox accountView = VBoxBuilder.create().add(balanceLabel).padding().build();
 
-        this.foregroundView.add(gameButtonHBox).centre().padding(25);
+        this.foregroundView.add(VBoxBuilder.create().add(this.accountButton.build(), InterfaceUtils.createVerticalSpacer()).fixHeight(50).build(), InterfaceUtils.createVerticalSpacer(), gameButtonHBox, InterfaceUtils.createVerticalSpacer(), VBoxBuilder.create().fixHeight(50).build()).padding();
 
-        // Creates and returns a VBox as the main layout.
+        // Configures and builds the main view.
         return view.add(HBoxBuilder.create().add(InterfaceUtils.createHorizontalSpacer(), accountView).build(), this.foregroundView.build()).build();
+    }
+
+    @Override
+    public void toNewScreen(MenuScreen newScreen, TranslateAxis slideAxis, boolean slideFromPositive) {
+        super.toNewScreen(newScreen, slideAxis, slideFromPositive);
+
+        // Close the account stage if it's currently open.
+        if (this.accountStage != null)
+            this.accountStage.close();
     }
 
     /**
      * Fills out the <tt>gameButtons</tt> map for each game in the registry.
      */
     private void setupGameButtons () {
-        // This must be initialised here because it is called from setupScreen which is called from the super-class's constructor.
-        this.gameButtons = new HashMap<>();
-
         Games.GAMES.forEach(gameHolder -> {
             final Button gameButton = ButtonBuilder.create().text(gameHolder.getName()).styleClasses(GAME_BUTTON_CLASS, AppConstants.INVISIBLE_BUTTON_CLASS)
                     .title().fixWidthHeight(150).onAction(event -> this.onGamePressed(gameHolder)).build();
@@ -108,7 +119,7 @@ public final class GamesMenuScreen extends MenuScreen {
             this.selectedGame = gameHolder;
 
             // Add bet amount field and start game button (if they aren't already present).
-            this.foregroundView.insertIfNotPresent(this.buttonSelectedGroup.build(), this.foregroundView.build().getChildren().size() - 1);
+            this.foregroundView.insertIfNotPresent(this.buttonSelectedGroup.build(), this.foregroundView.build().getChildren().size() - 2);
 
             this.betAmountField.focus();
 
@@ -156,7 +167,6 @@ public final class GamesMenuScreen extends MenuScreen {
 
         // Ensure the user has enough money to make the bet.
         if (this.user.getBitcoins() < betAmount) {
-            // TODO: Display user's balance in top right of screen.
             this.error("You do not have enough to bet.");
             return;
         }
@@ -174,9 +184,29 @@ public final class GamesMenuScreen extends MenuScreen {
         this.errorClearer.play();
     }
 
+    /**
+     * Executes when the account button is pressed, opening the account stage or creating and showing a new one.
+     *
+     * @param event The {@link Event}.
+     */
+    private void onAccountPressed (ActionEvent event) {
+        if (this.accountStage != null)
+            // If the account stage is already open, bring it to the foreground.
+            this.accountStage.getStage().requestFocus();
+        else {
+            // Otherwise, we create an account stage.
+            this.accountStage = new AccountStageHandler(this.casino, this);
+            this.accountStage.show();
+        }
+    }
+
     @Override
     public String getTitle() {
         return "Games";
+    }
+
+    public void setAccountStage(AccountStageHandler accountStage) {
+        this.accountStage = accountStage;
     }
 
 }

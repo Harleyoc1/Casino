@@ -39,7 +39,7 @@ public final class Casino extends Application {
         this.primaryScene = new Scene(this.primaryView);
 
         // Add default stylesheet to the scene.
-        this.primaryScene.getStylesheets().add(AppConstants.FILE_PREFIX + FileUtils.getFile(AppConstants.DEFAULT_STYLESHEET_PATH).getPath());
+        this.addDefaultStylesheet(this.primaryScene);
 
         this.setupBasicProperties();
 
@@ -97,6 +97,15 @@ public final class Casino extends Application {
      */
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    /**
+     * Adds the default stylesheet to the given {@link Scene} object.
+     *
+     * @param scene The {@link Scene} object.
+     */
+    public void addDefaultStylesheet (Scene scene) {
+        scene.getStylesheets().add(AppConstants.FILE_PREFIX + FileUtils.getFile(AppConstants.DEFAULT_STYLESHEET_PATH).getPath());
     }
 
     public static void main (String[] args) {

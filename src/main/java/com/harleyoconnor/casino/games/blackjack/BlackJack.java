@@ -1,5 +1,6 @@
 package com.harleyoconnor.casino.games.blackjack;
 
+import com.harleyoconnor.casino.AppConstants;
 import com.harleyoconnor.casino.Casino;
 import com.harleyoconnor.casino.animations.Animation;
 import com.harleyoconnor.casino.animations.SlideAnimation;
@@ -95,10 +96,10 @@ public final class BlackJack extends Game {
         this.betLabel.text(this.getBetLabelText()).body();
 
         // Create action buttons.
-        Button hitButton = ButtonBuilder.create().text("Hit").onAction(this::onHitPress).fixWidth(BUTTON_WIDTH).body().build();
-        Button standButton = ButtonBuilder.create().text("Stand").onAction(this::onStandPress).fixWidth(BUTTON_WIDTH).body().build();
-        Button doubleDownButton = ButtonBuilder.create().text("Double Down").onAction(this::onDoubleDownPress).fixWidth(BUTTON_WIDTH).body().build();
-        Button surrenderButton = ButtonBuilder.create().text("Surrender").onAction(this::onSurrenderPress).fixWidth(BUTTON_WIDTH).build();
+        Button hitButton = ButtonBuilder.create().text("Hit").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onHitPress).fixWidth(BUTTON_WIDTH).body().build();
+        Button standButton = ButtonBuilder.create().text("Stand").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onStandPress).fixWidth(BUTTON_WIDTH).body().build();
+        Button doubleDownButton = ButtonBuilder.create().text("Double Down").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onDoubleDownPress).fixWidth(BUTTON_WIDTH).body().build();
+        Button surrenderButton = ButtonBuilder.create().text("Surrender").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onSurrenderPress).fixWidth(BUTTON_WIDTH).build();
 
         // Bind disable properties.
         doubleDownButton.disableProperty().bind(this.doubleDownDisabled);
@@ -452,7 +453,8 @@ public final class BlackJack extends Game {
         }
 
         // Finish building the result box. Translate it a screen up so it's out of view initially.
-        resultBoxBuilder.add(middleTextDisplay).add(HBoxBuilder.create().add(ButtonBuilder.create().text("Rematch").onAction(this::onRematchPress).body().styleClasses("black-border").build(), ButtonBuilder.create().text("Quit").onAction(this::onQuitPress).body().styleClasses("black-border").build())
+        resultBoxBuilder.add(middleTextDisplay).add(HBoxBuilder.create().add(ButtonBuilder.create().text("Rematch").onAction(this::onRematchPress).body().styleClasses("black-border", AppConstants.WHITE_BUTTON).build(),
+                ButtonBuilder.create().text("Quit").onAction(this::onQuitPress).body().styleClasses("black-border", AppConstants.WHITE_BUTTON).build())
                 .centre().spacing().build()).translateY(-this.scene.getHeight()).styleClasses("game-end-stats").centre().padding().maxWidthHeight(260);
 
         this.layout.getChildren().add(resultBoxBuilder.build()); // Add result box to the view.

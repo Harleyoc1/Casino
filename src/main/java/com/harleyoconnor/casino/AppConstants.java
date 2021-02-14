@@ -25,6 +25,7 @@ public final class AppConstants {
 
     // File paths.
     public static final String DEFAULT_STYLESHEET_PATH = STYLESHEETS_PATH + "default.css";
+    public static final String ACCOUNT_STYLESHEET_PATH = STYLESHEETS_PATH + "account-screen.css";
 
 
     // Style classes.
@@ -32,6 +33,7 @@ public final class AppConstants {
     public static final String BODY_CLASS = "body";
     public static final String INVISIBLE_BUTTON_CLASS = "invisible-button";
     public static final String WHITE_TEXT = "white-text";
+    public static final String WHITE_BUTTON = "white-button";
 
 
     // Window constants.

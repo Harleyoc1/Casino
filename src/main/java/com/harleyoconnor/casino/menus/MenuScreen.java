@@ -63,13 +63,13 @@ public abstract class MenuScreen {
         this.previousScreen = previousScreen;
 
         if (autoSetUpScreen)
-            this.layout = this.addSceneStyleClass(this.setupScreen());
+            this.layout = this.addViewStyleClass(this.setupScreen());
     }
 
     /**
      * Sets the title of the scene to the result of <tt>this.getTitle()</tt>.
      */
-    private void setTitle () {
+    public void setTitle () {
         this.casino.setTitle(this.getTitle());
     }
 
@@ -78,7 +78,7 @@ public abstract class MenuScreen {
      */
     public void show () {
         this.setTitle();
-        this.parentView.getChildren().add(this.addSceneStyleClass(this.layout));
+        this.parentView.getChildren().add(this.addViewStyleClass(this.layout));
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class MenuScreen {
         newScreen.onSlideInFinished(event);
     }
 
-    public Pane addSceneStyleClass (Pane pane) {
+    public Pane addViewStyleClass(Pane pane) {
         pane.getStyleClass().add("menu-screen");
         return pane;
     }

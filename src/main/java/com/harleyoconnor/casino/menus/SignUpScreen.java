@@ -46,10 +46,10 @@ public final class SignUpScreen extends MenuScreen {
         this.errorLabel = LabelBuilder.create().body().styleClasses(AppConstants.WHITE_TEXT).wrapText().build();
 
         // Create sign up button - this will attempt to sign the user up based on the entered data.
-        Button signUpButton = ButtonBuilder.create().text("Sign Up").onAction(this::onSignUpPress).build();
+        Button signUpButton = ButtonBuilder.create().text("Sign Up").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onSignUpPress).build();
 
         // Create sign in button - this will redirect the user to the sign in screen.
-        Button signInButton = ButtonBuilder.create().text("Sign In").onAction(this::onSignInPress).build();
+        Button signInButton = ButtonBuilder.create().text("Sign In").styleClasses(AppConstants.WHITE_BUTTON).onAction(this::onSignInPress).build();
 
         // Create vertical box and add the content to it.
         VBox vBox = VBoxBuilder.create().add(titleLabel, this.usernameField, this.passwordField, this.confirmPasswordField,
